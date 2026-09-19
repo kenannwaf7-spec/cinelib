@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineLib - Streaming & Digital Library</title>
+  <title>CineLib - Game of Thrones</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -25,7 +25,7 @@
         <!-- Desktop Nav -->
         <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
           <button onclick="showTab('home')" class="hover:text-red-500 transition"><i class="fa-solid fa-house mr-1"></i> Home</button>
-          <button onclick="showTab('saved')" class="hover:text-red-500 transition"><i class="fa-solid fa-bookmark mr-1"></i> Saved Movies</button>
+          <button onclick="showTab('saved')" class="hover:text-red-500 transition"><i class="fa-solid fa-bookmark mr-1"></i> Saved</button>
           <button onclick="showTab('library')" class="hover:text-red-500 transition"><i class="fa-solid fa-book mr-1"></i> Library (Books)</button>
           <button onclick="showTab('profile')" class="hover:text-red-500 transition"><i class="fa-solid fa-user mr-1"></i> Profile</button>
           <button onclick="showTab('settings')" class="hover:text-red-500 transition"><i class="fa-solid fa-gear mr-1"></i> Settings</button>
@@ -50,55 +50,45 @@
 
     <!-- HOME TAB -->
     <div id="tab-home" class="space-y-8">
-      <!-- Hero Featured Banner -->
+      <!-- Hero Featured Banner for S01E01 -->
       <div class="relative bg-gradient-to-r from-red-950 via-gray-900 to-gray-950 rounded-2xl p-6 md:p-10 border border-gray-800 overflow-hidden shadow-2xl">
         <div class="max-w-xl z-10 relative">
-          <span class="bg-red-600/30 text-red-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-red-500/30">🔥 Featured Series</span>
-          <h1 class="text-3xl md:text-5xl font-black mt-3 mb-2 tracking-tight">House of the Dragon</h1>
-          <p class="text-gray-400 text-sm mb-4 line-clamp-2">An epic series set 200 years before the events of Game of Thrones.</p>
+          <span class="bg-red-600/30 text-red-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-red-500/30">🔥 S01E01 - Winter Is Coming</span>
+          <h1 class="text-3xl md:text-5xl font-black mt-3 mb-2 tracking-tight">Game of Thrones</h1>
+          <p class="text-gray-400 text-sm mb-4 line-clamp-2">Season 1 Episode 1: Eddard Stark is torn between his family and an old friend when asked to serve at the side of King Robert Baratheon.</p>
           <div class="flex gap-3">
-            <button onclick="playMedia('House of the Dragon', 'https://www.youtube.com/embed/DotnJ7tTA34')" class="bg-red-600 hover:bg-red-700 px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition"><i class="fa-solid fa-play"></i> Watch Now</button>
-            <button onclick="saveMedia('House of the Dragon')" class="bg-gray-800 hover:bg-gray-700 px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 border border-gray-700 transition"><i class="fa-solid fa-bookmark text-red-500"></i> Save to Watchlist</button>
+            <button onclick="playMedia('Game of Thrones - S01E01', 'https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview')" class="bg-red-600 hover:bg-red-700 px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition"><i class="fa-solid fa-play"></i> Watch S01E01</button>
+            <button onclick="saveMedia('Game of Thrones - S01E01')" class="bg-gray-800 hover:bg-gray-700 px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 border border-gray-700 transition"><i class="fa-solid fa-bookmark text-red-500"></i> Save Episode</button>
           </div>
         </div>
       </div>
 
-      <!-- Section 1: New Releases (Movies) -->
+      <!-- English TV Series Grid -->
       <section>
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-fire text-red-500"></i> New Movies</h2>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="newMoviesGrid"></div>
-      </section>
-
-      <!-- Section 2: English TV Series -->
-      <section>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-tv text-red-500"></i> English TV Series</h2>
+          <h2 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-tv text-red-500"></i> TV Episodes</h2>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="seriesGrid"></div>
       </section>
     </div>
 
-    <!-- SAVED MOVIES TAB -->
+    <!-- SAVED TAB -->
     <div id="tab-saved" class="hidden">
-      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-bookmark text-red-500"></i> Saved Movies & Series</h2>
-      <p class="text-gray-400 text-sm mb-6">Your personal watchlist for movies and TV shows saved to watch later.</p>
+      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-bookmark text-red-500"></i> Saved Episodes</h2>
+      <p class="text-gray-400 text-sm mb-6">Your personal watchlist for episodes saved to watch later.</p>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="savedGrid">
-        <div class="col-span-full text-center py-12 text-gray-500">No saved movies or series yet. Click "Save" on any title to add it here.</div>
+        <div class="col-span-full text-center py-12 text-gray-500">No saved items yet.</div>
       </div>
     </div>
 
-    <!-- DIGITAL LIBRARY (BOOKS) TAB - NO MOVIES HERE -->
+    <!-- DIGITAL LIBRARY (BOOKS) TAB -->
     <div id="tab-library" class="hidden">
       <div class="flex items-center justify-between mb-6 border-b border-gray-800 pb-4">
         <div>
           <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-book-open text-red-500"></i> Digital Book Library</h2>
-          <p class="text-gray-400 text-sm mt-1">Read digital books, novels, and educational guides (No Movies).</p>
+          <p class="text-gray-400 text-sm mt-1">Read digital books, novels, and guides.</p>
         </div>
       </div>
-      
-      <!-- Books Grid -->
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="booksGrid"></div>
     </div>
 
@@ -126,21 +116,10 @@
         <div class="space-y-6 text-sm">
           <div class="flex items-center justify-between">
             <div>
-              <p class="font-semibold">Autoplay Video Trailers</p>
-              <p class="text-xs text-gray-400">Play trailers automatically when opened</p>
+              <p class="font-semibold">Autoplay Video</p>
+              <p class="text-xs text-gray-400">Play video automatically when opened</p>
             </div>
             <input type="checkbox" checked class="accent-red-600 w-5 h-5 cursor-pointer">
-          </div>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="font-semibold">Video Quality</p>
-              <p class="text-xs text-gray-400">Preferred streaming resolution</p>
-            </div>
-            <select class="bg-gray-800 border border-gray-700 rounded p-1.5 text-xs text-white">
-              <option>1080p Full HD</option>
-              <option>720p HD</option>
-              <option>4K Ultra HD</option>
-            </select>
           </div>
         </div>
       </div>
@@ -207,7 +186,7 @@
     </div>
   </div>
 
-  <!-- App JavaScript & Firebase -->
+  <!-- JavaScript -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
@@ -224,43 +203,33 @@
       projectId: "cinelib-dbc8d",
       storageBucket: "cinelib-dbc8d.firebasestorage.app",
       messagingSenderId: "392966812345",
-      appId: "1:392966812345:web:f7d3aaa472df295cafe168",
-      measurementId: "G-Q8J9Y8G90F"
+      appId: "1:392966812345:web:f7d3aaa472df295cafe168"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Media Data (Movies and Series)
-    const movies = [
-      { id: 1, title: "Dune: Part Two", year: "2024", type: "Movie", poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80", video: "https://www.youtube.com/embed/Way9Dexny3w" },
-      { id: 2, title: "Oppenheimer", year: "2023", type: "Movie", poster: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&q=80", video: "https://www.youtube.com/embed/uYPbbksJxIg" },
-      { id: 3, title: "Avatar: The Way of Water", year: "2022", type: "Movie", poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80", video: "https://www.youtube.com/embed/d9MyW72ELq0" },
-      { id: 4, title: "The Batman", year: "2022", type: "Movie", poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80", video: "https://www.youtube.com/embed/mqqft2x_Aa4" },
-      { id: 5, title: "Interstellar", year: "2014", type: "Movie", poster: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80", video: "https://www.youtube.com/embed/zSWdZVtXT7E" }
-    ];
-
+    // GAME OF THRONES WITH THE EXACT POSTER IMAGE
     const series = [
-      { id: 6, title: "Game of Thrones", year: "2011 - 2019", type: "Series", poster: "https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80", video: "https://www.youtube.com/embed/gcTkNV5Vg1E" },
-      { id: 7, title: "Breaking Bad", year: "2008 - 2013", type: "Series", poster: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80", video: "https://www.youtube.com/embed/HhesaQXLuRY" },
-      { id: 8, title: "Stranger Things", year: "2016 - Present", type: "Series", poster: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80", video: "https://www.youtube.com/embed/b9EkMc79ZSU" },
-      { id: 9, title: "The Witcher", year: "2019 - Present", type: "Series", poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80", video: "https://www.youtube.com/embed/ndl1W4ltcmg" },
-      { id: 10, title: "Peaky Blinders", year: "2013 - 2022", type: "Series", poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80", video: "https://www.youtube.com/embed/oVzVdvGIC7U" }
+      { 
+        id: 1, 
+        title: "Game of Thrones - S01E01", 
+        year: "Season 1 • Episode 1", 
+        type: "Series", 
+        poster: "https://m.media-amazon.com/images/M/MVBOMTY3ODUzOWMtNjJhNy00YWNmLWEwNTUtM2RlMmRkY2M0YzkxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", 
+        video: "https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview" 
+      }
     ];
 
-    // Digital Books Data (ONLY BOOKS FOR LIBRARY)
     const books = [
-      { id: 101, title: "A Game of Thrones", author: "George R.R. Martin", year: "1996", cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80", summary: "The first book in A Song of Ice and Fire novel series." },
-      { id: 102, title: "Dune", author: "Frank Herbert", year: "1965", cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&q=80", summary: "The story of Paul Atreides and the desert planet Arrakis." },
-      { id: 103, title: "1984", author: "George Orwell", year: "1949", cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80", summary: "A dystopian novel exploring total government surveillance." },
-      { id: 104, title: "The Hobbit", author: "J.R.R. Tolkien", year: "1937", cover: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80", summary: "The epic fantasy adventure of Bilbo Baggins." }
+      { id: 101, title: "A Game of Thrones", author: "George R.R. Martin", year: "1996", cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80", summary: "The first book in A Song of Ice and Fire novel series." }
     ];
 
     let savedMediaList = [];
 
-    // Render Movies & Series
     function renderMediaGrid(containerId, items) {
       const container = document.getElementById(containerId);
+      if(!container) return;
       container.innerHTML = items.map(item => `
         <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-red-600/50 transition group flex flex-col">
           <div class="relative overflow-hidden aspect-[2/3] bg-gray-800">
@@ -272,7 +241,7 @@
           <div class="p-3 flex-grow flex flex-col justify-between">
             <div>
               <h3 class="font-bold text-sm truncate">${item.title}</h3>
-              <p class="text-xs text-gray-400 mt-0.5">${item.year} • ${item.type}</p>
+              <p class="text-xs text-gray-400 mt-0.5">${item.year}</p>
             </div>
             <button onclick="saveMedia('${item.title}')" class="mt-3 w-full bg-gray-800 hover:bg-red-600/20 hover:text-red-500 py-1.5 rounded-lg text-xs font-semibold border border-gray-700 transition flex items-center justify-center gap-1">
               <i class="fa-solid fa-bookmark"></i> Save
@@ -282,9 +251,9 @@
       `).join('');
     }
 
-    // Render Digital Books ONLY in Library Tab
     function renderBooksGrid() {
       const container = document.getElementById('booksGrid');
+      if(!container) return;
       container.innerHTML = books.map(book => `
         <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-red-600/50 transition group flex flex-col">
           <div class="relative overflow-hidden aspect-[2/3] bg-gray-800">
@@ -304,11 +273,9 @@
       `).join('');
     }
 
-    renderMediaGrid('newMoviesGrid', movies);
     renderMediaGrid('seriesGrid', series);
     renderBooksGrid();
 
-    // Tab Switching Logic
     window.showTab = (tabName) => {
       ['home', 'saved', 'library', 'profile', 'settings'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.add('hidden');
@@ -316,10 +283,9 @@
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
     };
 
-    // Video Player Logic
     window.playMedia = (title, videoUrl) => {
       document.getElementById('videoModalTitle').innerText = title;
-      document.getElementById('videoIframe').src = videoUrl + "?autoplay=1";
+      document.getElementById('videoIframe').src = videoUrl;
       document.getElementById('videoModal').classList.remove('hidden');
     };
 
@@ -328,7 +294,6 @@
       document.getElementById('videoModal').classList.add('hidden');
     };
 
-    // Book Reader Logic
     window.readBook = (title, author, summary) => {
       document.getElementById('bookModalTitle').innerText = title;
       document.getElementById('bookModalAuthor').innerText = "By " + author;
@@ -340,11 +305,10 @@
       document.getElementById('bookModal').classList.add('hidden');
     };
 
-    // Save Media to Watchlist
     window.saveMedia = (title) => {
       if (!savedMediaList.includes(title)) {
         savedMediaList.push(title);
-        alert(`"${title}" saved to your Saved list!`);
+        alert(`"${title}" saved!`);
         updateSavedView();
       } else {
         alert(`"${title}" is already in your saved list.`);
@@ -354,25 +318,20 @@
     function updateSavedView() {
       const container = document.getElementById('savedGrid');
       if (savedMediaList.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No saved movies or series yet. Click "Save" on any title to add it here.</div>`;
+        container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No saved items yet.</div>`;
         return;
       }
-      const allSaved = [...movies, ...series].filter(i => savedMediaList.includes(i.title));
+      const allSaved = series.filter(i => savedMediaList.includes(i.title));
       renderMediaGrid('savedGrid', allSaved);
     }
 
-    // Search Logic
     window.handleSearch = () => {
       const query = document.getElementById('searchInput').value.toLowerCase();
-      const filteredMovies = movies.filter(m => m.title.toLowerCase().includes(query));
       const filteredSeries = series.filter(s => s.title.toLowerCase().includes(query));
-      
       showTab('home');
-      renderMediaGrid('newMoviesGrid', filteredMovies);
       renderMediaGrid('seriesGrid', filteredSeries);
     };
 
-    // Auth Logic
     let isLoginMode = true;
     window.openAuthModal = () => document.getElementById('authModal').classList.remove('hidden');
     window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
