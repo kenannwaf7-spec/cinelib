@@ -42,7 +42,7 @@
 
       <!-- Search Bar -->
       <div class="flex-grow max-w-xs relative">
-        <input type="text" id="searchInput" placeholder="Search movies, series..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600">
+        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search movies, series..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
       </div>
 
@@ -72,7 +72,7 @@
             <i class="fa-solid fa-fire text-red-500"></i> New Movies
           </h2>
         </div>
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center text-gray-400">
+        <div id="newMoviesList" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center text-gray-400">
           <p class="text-sm">New movies will be listed here soon.</p>
         </div>
       </section>
@@ -85,9 +85,9 @@
           </h2>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div id="seriesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <!-- Game of Thrones Card -->
-          <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
+          <div data-title="game of thrones" onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
             <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
               <img src="https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1ee1uC.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
               <div class="absolute top-3 right-3 bg-black/80 px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400">⭐ 9.2</div>
@@ -118,13 +118,9 @@
           ▶ Game of Thrones: Season 1 - Episode <span id="currentEpNum">1</span>
         </h2>
 
-        <!-- Fixed Video Player Frame -->
+        <!-- Reliable Streaming Player -->
         <div class="video-container shadow-2xl border border-gray-800">
-          <iframe id="mainVideoIframe" 
-                  src="https://vidsrc.to/embed/tv/1399/1/1" 
-                  allow="autoplay; encrypted-media; fullscreen" 
-                  allowfullscreen>
-          </iframe>
+          <iframe id="mainVideoIframe" src="https://vidsrc.to/embed/tv/1399/1/1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
         </div>
       </div>
 
@@ -292,15 +288,41 @@
     }
 
     const episodesGrid = document.getElementById('episodesGrid');
+    
+    function setEpisode(epNum) {
+      document.getElementById('currentEpNum').innerText = epNum;
+      document.getElementById('mainVideoIframe').src = `https://vidsrc.to/embed/tv/1399/1/${epNum}`;
+      
+      const buttons = episodesGrid.querySelectorAll('button');
+      buttons.forEach((btn, index) => {
+        if (index + 1 === epNum) {
+          btn.className = 'py-2 rounded-lg font-bold text-xs transition bg-red-600 text-white';
+        } else {
+          btn.className = 'py-2 rounded-lg font-bold text-xs transition bg-gray-800 text-gray-300';
+        }
+      });
+    }
+
     for (let i = 1; i <= 10; i++) {
       const btn = document.createElement('button');
       btn.className = `py-2 rounded-lg font-bold text-xs transition ${i === 1 ? 'bg-red-600 text-white' : 'bg-gray-800 text-gray-300'}`;
       btn.innerText = i;
-      btn.onclick = () => {
-        document.getElementById('currentEpNum').innerText = i;
-        document.getElementById('mainVideoIframe').src = `https://vidsrc.to/embed/tv/1399/1/${i}`;
-      };
+      btn.onclick = () => setEpisode(i);
       episodesGrid.appendChild(btn);
+    }
+
+    function handleSearch(query) {
+      const term = query.toLowerCase().trim();
+      const cards = document.querySelectorAll('#seriesGrid > div');
+      
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        if (title.includes(term)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
     }
 
     function openExternal() {
