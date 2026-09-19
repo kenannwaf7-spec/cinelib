@@ -3,24 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineLib - Streaming Platform</title>
+  <title>CineLib - Clean Streaming Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="CineLib">
-
   <style>
-    .video-container {
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f293d;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #dc2626;
+    }
+
+    /* Video Player Aspect Ratio Container */
+    .video-aspect-ratio {
       position: relative;
-      padding-bottom: 56.25%;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
       height: 0;
       overflow: hidden;
-      border-radius: 1rem;
-      background-color: #000;
     }
-    .video-container iframe {
+    
+    .video-aspect-ratio iframe,
+    .video-aspect-ratio video {
       position: absolute;
       top: 0;
       left: 0;
@@ -30,10 +42,9 @@
     }
   </style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen flex flex-col font-sans pb-20 md:pb-0">
+<body class="bg-gray-950 text-white min-h-screen flex flex-col font-sans pb-20 md:pb-0 select-none">
 
-  <!-- Header Navigation -->
-  <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-40">
+  <header class="bg-gray-900/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
       <div class="flex items-center gap-2 cursor-pointer" onclick="showTab('home')">
         <i class="fa-solid fa-film text-red-600 text-2xl"></i>
@@ -42,16 +53,17 @@
 
       <!-- Search Bar -->
       <div class="flex-grow max-w-xs relative">
-        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search movies, series..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600">
+        <input type="text" id="searchInput" placeholder="Search movies, series..." class="w-full bg-gray-800/80 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600 transition">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
       </div>
 
+      <!-- Desktop Nav Buttons -->
       <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
-        <button onclick="showTab('home')" class="hover:text-red-500 transition"><i class="fa-solid fa-house mr-1"></i> Home</button>
-        <button onclick="showTab('library')" class="hover:text-red-500 transition"><i class="fa-solid fa-book mr-1"></i> Library</button>
-        <button onclick="showTab('saved')" class="hover:text-red-500 transition"><i class="fa-solid fa-bookmark mr-1"></i> Saved</button>
-        <button onclick="showTab('account')" class="hover:text-red-500 transition"><i class="fa-solid fa-user mr-1"></i> Account</button>
-        <button onclick="showTab('settings')" class="hover:text-red-500 transition"><i class="fa-solid fa-gear mr-1"></i> Settings</button>
+        <button onclick="showTab('home')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-house"></i> Home</button>
+        <button onclick="showTab('library')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-book"></i> Library</button>
+        <button onclick="showTab('saved')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-bookmark"></i> Saved</button>
+        <button onclick="showTab('account')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-user"></i> Account</button>
+        <button onclick="showTab('settings')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> Settings</button>
       </nav>
 
       <div id="authBtnContainer">
@@ -72,8 +84,8 @@
             <i class="fa-solid fa-fire text-red-500"></i> New Movies
           </h2>
         </div>
-        <div id="newMoviesList" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center text-gray-400">
-          <p class="text-sm">New movies will be listed here soon.</p>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center text-gray-400">
+          <p class="text-sm">New ad-free movies will be listed here soon.</p>
         </div>
       </section>
 
@@ -85,9 +97,9 @@
           </h2>
         </div>
 
-        <div id="seriesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <!-- Game of Thrones Card -->
-          <div data-title="game of thrones" onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
+          <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
             <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
               <img src="https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1ee1uC.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
               <div class="absolute top-3 right-3 bg-black/80 px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400">⭐ 9.2</div>
@@ -102,33 +114,37 @@
 
     </div>
 
-    <!-- SERIES & STREAMING PAGE -->
     <div id="tab-series-details" class="hidden space-y-6">
       <div class="flex items-center justify-between">
         <button onclick="showTab('home')" class="text-xs font-semibold bg-gray-800 hover:bg-gray-700 px-3.5 py-2 rounded-xl border border-gray-700 transition">
           ← Back to Home
         </button>
-        <button onclick="openExternal()" class="text-xs font-semibold bg-red-600 hover:bg-red-700 px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+        <button onclick="toggleFullScreen()" class="text-xs font-semibold bg-red-600 hover:bg-red-700 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
           <i class="fa-solid fa-expand"></i> Full Screen Mode
         </button>
       </div>
 
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3 md:p-5 shadow-2xl space-y-3">
-        <h2 class="text-base md:text-lg font-bold text-red-500">
-          ▶ Game of Thrones: Season 1 - Episode <span id="currentEpNum">1</span>
+        <h2 class="text-base md:text-lg font-bold text-red-500 flex items-center gap-2">
+          <i class="fa-solid fa-circle-play"></i> Game of Thrones: Season 1 - Episode <span id="currentEpNum">1</span>
         </h2>
 
-        <!-- Reliable Streaming Player -->
-        <div class="video-container shadow-2xl border border-gray-800">
-          <iframe id="mainVideoIframe" src="https://vidsrc.to/embed/tv/1399/1/1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        <!-- Clean HTML5 Native Player -->
+        <div id="videoContainer" class="video-aspect-ratio rounded-xl overflow-hidden bg-black border border-gray-800 shadow-2xl">
+          <video id="cleanVideoPlayer" controls class="w-full h-full object-contain" poster="https://image.tmdb.org/t/p/w1280/2OMG023R3I3263.jpg">
+            <source id="videoSource" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            Your browser does not support HTML5 video player.
+          </video>
         </div>
       </div>
 
+      <!-- Episode Selector Grid -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
-        <h3 class="font-bold text-sm">Episodes (Season 1)</h3>
+        <h3 class="font-bold text-sm text-gray-300">Episodes (Season 1)</h3>
         <div class="grid grid-cols-5 sm:grid-cols-10 gap-2" id="episodesGrid"></div>
       </div>
 
+      <!-- Overview Info -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl space-y-2">
         <h1 class="text-xl font-bold">Game of Thrones</h1>
         <p class="text-gray-400 text-xs leading-relaxed">
@@ -137,7 +153,7 @@
       </div>
     </div>
 
-    <!-- LIBRARY TAB -->
+    <!-- OTHER TABS -->
     <div id="tab-library" class="hidden space-y-6">
       <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Digital Library</h2>
       <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 max-w-sm">
@@ -147,13 +163,11 @@
       </div>
     </div>
 
-    <!-- SAVED TAB -->
     <div id="tab-saved" class="hidden space-y-6">
       <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Saved Items</h2>
       <p class="text-gray-500 text-sm">No saved items found.</p>
     </div>
 
-    <!-- ACCOUNT TAB -->
     <div id="tab-account" class="hidden space-y-6">
       <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">User Account</h2>
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-md">
@@ -161,7 +175,6 @@
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
     <div id="tab-settings" class="hidden space-y-6">
       <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Settings</h2>
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-md space-y-4 text-sm">
@@ -174,8 +187,7 @@
 
   </main>
 
-  <!-- Mobile Bottom Navigation -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around py-2.5 z-40 text-xs">
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 flex justify-around py-2.5 z-40 text-xs">
     <button onclick="showTab('home')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-house text-lg"></i><span>Home</span></button>
     <button onclick="showTab('library')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-book text-lg"></i><span>Library</span></button>
     <button onclick="showTab('saved')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-bookmark text-lg"></i><span>Saved</span></button>
@@ -183,97 +195,27 @@
     <button onclick="showTab('settings')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-gear text-lg"></i><span>Settings</span></button>
   </nav>
 
-  <!-- Firebase Auth Modal -->
-  <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-gray-900 border border-gray-800 w-full max-w-md p-6 rounded-2xl relative shadow-2xl">
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
-      
-      <div class="text-center mb-6">
-        <div class="w-12 h-12 bg-red-600/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <h2 class="text-xl font-bold">Welcome to CineLib</h2>
-        <p class="text-xs text-gray-400 mt-1">Sign in to sync your account</p>
-      </div>
-
-      <form id="authForm" onsubmit="handleSignIn(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs text-gray-400 mb-1">Email Address</label>
-          <input type="email" id="authEmail" required class="w-full bg-gray-800 border border-gray-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-red-600">
-        </div>
-        <div>
-          <label class="block text-xs text-gray-400 mb-1">Password</label>
-          <input type="password" id="authPassword" required class="w-full bg-gray-800 border border-gray-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-red-600">
-        </div>
-
-        <p id="authError" class="text-xs text-red-500 font-semibold hidden"></p>
-
-        <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 py-2.5 rounded-xl font-semibold text-sm transition">Sign In</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Firebase Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyIedYSKXuC9uJLLfWdwmNRiIsZmAPWX4",
-      authDomain: "cinelib-dbc8d.firebaseapp.com",
-      projectId: "cinelib-dbc8d",
-      storageBucket: "cinelib-dbc8d.firebasestorage.app",
-      messagingSenderId: "392966812345",
-      appId: "1:392966812345:web:f7d3aaa472df295cafe168"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    window.handleSignIn = async function(e) {
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value;
-      const password = document.getElementById('authPassword').value;
-      const errorEl = document.getElementById('authError');
-      const submitBtn = document.getElementById('authSubmitBtn');
-
-      errorEl.classList.add('hidden');
-      submitBtn.innerText = "Signing in...";
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        closeAuthModal();
-      } catch (err) {
-        errorEl.innerText = err.message;
-        errorEl.classList.remove('hidden');
-      } finally {
-        submitBtn.innerText = "Sign In";
-      }
-    };
-
-    onAuthStateChanged(auth, (user) => {
-      const authContainer = document.getElementById('authBtnContainer');
-      const emailDisplay = document.getElementById('userEmailDisplay');
-
-      if (user) {
-        authContainer.innerHTML = `
-          <button onclick="handleSignOut()" class="bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-1.5 rounded-lg text-xs transition">Logout (${user.email.split('@')[0]})</button>
-        `;
-        if (emailDisplay) emailDisplay.innerText = `Signed in as: ${user.email}`;
-      } else {
-        authContainer.innerHTML = `
-          <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg text-sm font-semibold transition">Sign In</button>
-        `;
-        if (emailDisplay) emailDisplay.innerText = "Not signed in.";
-      }
-    });
-
-    window.handleSignOut = function() {
-      signOut(auth);
-    };
-  </script>
-
   <script>
+    /* 1. Global Anti-Pop-up Protection Script */
+    window.open = function() {
+      console.warn("Blocked unauthorized popup attempt.");
+      return null;
+    };
+
+    /* Sample Ad-Free Video Sources for Episodes */
+    const episodeSources = {
+      1: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      2: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      3: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      4: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      5: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      6: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoylikes.mp4",
+      7: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+      8: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      9: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackAmazingPointers.mp4",
+      10: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+    };
+
     function showTab(tabName) {
       ['home', 'library', 'saved', 'account', 'settings', 'series-details'].forEach(t => {
         const el = document.getElementById(`tab-${t}`);
@@ -287,55 +229,39 @@
       showTab('series-details');
     }
 
+    /* Episode Selector Generator */
     const episodesGrid = document.getElementById('episodesGrid');
-    
-    function setEpisode(epNum) {
-      document.getElementById('currentEpNum').innerText = epNum;
-      document.getElementById('mainVideoIframe').src = `https://vidsrc.to/embed/tv/1399/1/${epNum}`;
-      
-      const buttons = episodesGrid.querySelectorAll('button');
-      buttons.forEach((btn, index) => {
-        if (index + 1 === epNum) {
-          btn.className = 'py-2 rounded-lg font-bold text-xs transition bg-red-600 text-white';
-        } else {
-          btn.className = 'py-2 rounded-lg font-bold text-xs transition bg-gray-800 text-gray-300';
-        }
-      });
-    }
-
     for (let i = 1; i <= 10; i++) {
       const btn = document.createElement('button');
-      btn.className = `py-2 rounded-lg font-bold text-xs transition ${i === 1 ? 'bg-red-600 text-white' : 'bg-gray-800 text-gray-300'}`;
+      btn.className = `py-2 rounded-lg font-bold text-xs transition ${i === 1 ? 'bg-red-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`;
       btn.innerText = i;
-      btn.onclick = () => setEpisode(i);
+      btn.onclick = () => {
+        document.querySelectorAll('#episodesGrid button').forEach(b => {
+          b.className = 'py-2 rounded-lg font-bold text-xs transition bg-gray-800 text-gray-300 hover:bg-gray-700';
+        });
+        btn.className = 'py-2 rounded-lg font-bold text-xs transition bg-red-600 text-white';
+        
+        document.getElementById('currentEpNum').innerText = i;
+        const player = document.getElementById('cleanVideoPlayer');
+        const source = document.getElementById('videoSource');
+        
+        source.src = episodeSources[i] || episodeSources[1];
+        player.load();
+        player.play();
+      };
       episodesGrid.appendChild(btn);
     }
 
-    function handleSearch(query) {
-      const term = query.toLowerCase().trim();
-      const cards = document.querySelectorAll('#seriesGrid > div');
-      
-      cards.forEach(card => {
-        const title = card.getAttribute('data-title') || '';
-        if (title.includes(term)) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-    }
-
-    function openExternal() {
-      const currentIframeSrc = document.getElementById('mainVideoIframe').src;
-      window.open(currentIframeSrc, "_blank");
-    }
-
-    function openAuthModal() {
-      document.getElementById('authModal').classList.remove('hidden');
-    }
-
-    function closeAuthModal() {
-      document.getElementById('authModal').classList.add('hidden');
+    /* Native Fullscreen Handler */
+    function toggleFullScreen() {
+      const player = document.getElementById('cleanVideoPlayer');
+      if (player.requestFullscreen) {
+        player.requestFullscreen();
+      } else if (player.webkitRequestFullscreen) {
+        player.webkitRequestFullscreen();
+      } else if (player.msRequestFullscreen) {
+        player.msRequestFullscreen();
+      }
     }
   </script>
 </body>
