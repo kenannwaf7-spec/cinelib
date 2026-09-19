@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLib - Movies, Series & Digital Library</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#E50914',
+                            gold: '#FFD700',
+                            dark: '#08080C',
+                            card: '#12131A',
+                            border: '#1E202C'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Glassmorphism & UI Styles -->
+    <style>
+        body {
+            background-color: #08080C;
+            color: #F1F5F9;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .glass-nav {
+            background: rgba(8, 8, 12, 0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(18, 19, 26, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: rgba(229, 9, 20, 0.5);
+            box-shadow: 0 14px 35px -10px rgba(229, 9, 20, 0.35);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(8, 8, 12, 0.1) 0%, rgba(8, 8, 12, 0.85) 70%, #08080C 100%);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #08080C;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1E202C;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #E50914;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar pb-20 md:pb-0">
+
+    <header class="glass-nav fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-3.5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Logo -->
+            <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchNav('movies')">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-red to-amber-500 flex items-center justify-center shadow-lg shadow-brand-red/30">
+                    <i class="fa-solid fa-play text-white text-sm"></i>
+                </div>
+                <span class="text-2xl font-black tracking-wider text-white">Cine<span class="text-brand-red">Lib</span></span>
+            </div>
+
+            <!-- Desktop Navigation Tabs -->
+            <nav class="hidden md:flex items-center gap-8 font-semibold text-sm">
+                <button onclick="switchNav('movies')" id="navMovies" class="nav-btn text-brand-red border-b-2 border-brand-red pb-1 transition flex items-center gap-2">
+                    <i class="fa-solid fa-film"></i> Movies
+                </button>
+                <button onclick="switchNav('series')" id="navSeries" class="nav-btn text-slate-400 hover:text-slate-200 pb-1 transition flex items-center gap-2">
+                    <i class="fa-solid fa-tv"></i> TV Series
+                </button>
+                <button onclick="switchNav('library')" id="navLibrary" class="nav-btn text-slate-400 hover:text-slate-200 pb-1 transition flex items-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> Library
+                </button>
+                <button onclick="switchNav('profile')" id="navProfile" class="nav-btn text-slate-400 hover:text-slate-200 pb-1 transition flex items-center gap-2">
+                    <i class="fa-solid fa-user-gear"></i> Profile
+                </button>
+            </nav>
+
+            <!-- Search Bar & Actions -->
+            <div class="flex items-center gap-3">
+                <div class="relative hidden sm:block w-48 lg:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-500 text-xs"></i>
+                    <input type="text" id="globalSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="Search catalog..." 
+                        class="w-full bg-slate-900 border border-slate-800 rounded-full pl-9 pr-8 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-red transition">
+                    <button onclick="clearGlobalSearch()" id="clearSearchBtn" class="hidden absolute right-3 top-2.5 text-slate-500 hover:text-slate-300 text-xs">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- User Quick Avatar -->
+                <button onclick="switchNav('profile')" class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-brand-red p-0.5 shadow-md hover:scale-105 transition">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200" alt="Avatar" class="w-full h-full object-cover rounded-full">
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Input -->
+        <div class="mt-2.5 sm:hidden relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-500 text-xs"></i>
+            <input type="text" id="mobileSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="Search movies, series, books..." 
+                class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-red">
+        </div>
+    </header>
+
+    <main class="flex-1 mt-24 md:mt-16">
+
+        <!-- ================= MOVIES SECTION ================= -->
+        <section id="sectionMovies" class="content-view max-w-7xl mx-auto px-4 md:px-8 pt-4">
+            <!-- Hero Spotlight -->
+            <div class="relative w-full h-[55vh] min-h-[380px] max-h-[520px] rounded-3xl overflow-hidden flex items-end p-6 md:p-10 mb-8 border border-slate-800/80 shadow-2xl">
+                <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" 
+                     style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1600');"></div>
+                <div class="absolute inset-0 hero-gradient"></div>
+
+                <div class="relative z-10 max-w-2xl space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-red text-white text-[11px] font-bold tracking-wider uppercase shadow-md">
+                        <i class="fa-solid fa-fire text-amber-300"></i> Featured Blockbuster
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-black text-white leading-tight">Dune: Part Two</h1>
+                    <p class="text-xs md:text-sm text-slate-300 line-clamp-2 leading-relaxed">
+                        Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.
+                    </p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <button onclick="openVideoPlayer('https://www.youtube.com/embed/Way9Dexny3w', 'Dune: Part Two - Official Trailer')" class="px-5 py-2.5 rounded-xl bg-brand-red hover:bg-red-700 text-white font-bold text-xs md:text-sm flex items-center gap-2 shadow-lg shadow-brand-red/30 transition">
+                            <i class="fa-solid fa-play"></i> Watch Trailer
+                        </button>
+                        <button onclick="toggleWatchlist('m1')" class="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-xs md:text-sm flex items-center gap-2 backdrop-blur transition">
+                            <i class="fa-solid fa-bookmark text-amber-400"></i> Save to Watchlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 mb-6">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-clapperboard text-brand-red"></i> Trending Movies
+                </h2>
+                <select id="movieGenreSelect" onchange="filterMoviesByGenre(this.value)" class="bg-slate-900 text-slate-300 text-xs rounded-xl border border-slate-800 px-3 py-1.5 focus:outline-none">
+                    <option value="all">All Genres</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Action">Action</option>
+                    <option value="History">History</option>
+                    <option value="Drama">Drama</option>
+                </select>
+            </div>
+
+            <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 mb-12">
+                <!-- Javascript rendered -->
+            </div>
+        </section>
+
+        <!-- ================= TV SERIES SECTION (With Game of Thrones) ================= -->
+        <section id="sectionSeries" class="content-view hidden max-w-7xl mx-auto px-4 md:px-8 pt-4">
+            
+            <!-- Game of Thrones Special Feature Header -->
+            <div class="relative w-full min-h-[460px] rounded-3xl overflow-hidden p-6 md:p-10 mb-10 border border-amber-500/20 bg-slate-950 flex flex-col justify-end shadow-2xl">
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 transition-all duration-700" 
+                     style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent"></div>
+
+                <div class="relative z-10 space-y-4 max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-gradient-to-r from-amber-500 to-amber-700 text-black text-[11px] font-black uppercase tracking-widest shadow-md">
+                        <i class="fa-solid fa-crown"></i> Exclusive Series Showcase
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white drop-shadow-md">Game of Thrones</h1>
+                    <p class="text-xs md:text-sm text-slate-300 leading-relaxed max-w-2xl">
+                        Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.
+                    </p>
+
+                    <!-- Season Selector Tabs -->
+                    <div class="pt-2">
+                        <div class="text-xs font-bold text-amber-400 mb-2 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> Select Season (Free Episode Streaming)
+                        </div>
+                        <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-2" id="gotSeasonTabs">
+                            <!-- JS Season Buttons 1 to 8 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Episodes List for GOT -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-ul text-brand-red"></i> 
+                        <span id="gotSeasonTitle">Season 1 Episodes</span>
+                    </h3>
+                    <span class="text-xs text-slate-400">8 - 10 Episodes per season available</span>
+                </div>
+                <div id="gotEpisodesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- JS Episodes populated -->
+                </div>
+            </div>
+
+            <!-- Other Series Grid -->
+            <div class="border-t border-slate-800/80 pt-8 mb-12">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-tv text-amber-400"></i> Popular TV Series
+                </h3>
+                <div id="seriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                    <!-- JS Populated -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= DIGITAL LIBRARY SECTION ================= -->
+        <section id="sectionLibrary" class="content-view hidden max-w-7xl mx-auto px-4 md:px-8 pt-4">
+            
+            <!-- Library Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-amber-950/30 to-slate-900 border border-amber-500/20 rounded-3xl p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="bg-amber-500/10 text-amber-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-amber-500/20">Digital Bookstore & Reader</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Explore Bestselling Books & E-Books</h2>
+                    <p class="text-xs text-slate-300 max-w-xl">Read sample chapters directly inside our built-in EPUB e-reader simulator with dark mode support.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-center px-4 py-2 bg-slate-900/80 rounded-2xl border border-slate-800">
+                        <div class="text-xl font-black text-amber-400">12,400+</div>
+                        <div class="text-[10px] text-slate-400">E-Books Available</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Books Grid -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-amber-400"></i> E-Book Collection
+                </h3>
+            </div>
+            <div id="booksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 mb-12">
+                <!-- JS populated -->
+            </div>
+        </section>
+
+        <!-- ================= USER PROFILE SECTION ================= -->
+        <section id="sectionProfile" class="content-view hidden max-w-7xl mx-auto px-4 md:px-8 pt-4">
+            
+            <!-- Profile Card -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 md:p-8 mb-8 relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row items-center gap-6 relative z-10">
+                    <div class="relative w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-brand-red via-amber-500 to-amber-300 shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" alt="User Profile" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <div class="text-center sm:text-left space-y-1">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <h2 class="text-2xl font-bold text-white">Alex Morgan</h2>
+                            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Pro Active</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Premium Ultra HD & Unlimited Library Access</p>
+                        <p class="text-[11px] text-slate-500">Member since January 2024</p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-800/80">
+                    <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60 text-center">
+                        <div class="text-2xl font-black text-brand-red" id="profileWatchlistCount">0</div>
+                        <div class="text-[11px] text-slate-400">Saved Items</div>
+                    </div>
+                    <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60 text-center">
+                        <div class="text-2xl font-black text-amber-400">142h</div>
+                        <div class="text-[11px] text-slate-400">Watch Time</div>
+                    </div>
+                    <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60 text-center">
+                        <div class="text-2xl font-black text-blue-400">28</div>
+                        <div class="text-[11px] text-slate-400">Books Read</div>
+                    </div>
+                    <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60 text-center">
+                        <div class="text-2xl font-black text-emerald-400">4K</div>
+                        <div class="text-[11px] text-slate-400">Streaming Plan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Watchlist Section inside Profile -->
+            <div class="mb-12">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark text-brand-red"></i> Saved Watchlist & Favorites
+                </h3>
+                <div id="profileWatchlistGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                    <!-- JS populated watchlist -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Video Player Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 sm:p-4 transition-all">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl max-w-4xl w-full overflow-hidden relative shadow-2xl">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-900/90">
+                <h3 id="videoModalTitle" class="text-sm font-bold text-white truncate">Playing Media</h3>
+                <button onclick="closeVideoModal()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <!-- Video Container -->
+            <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+                <iframe id="videoIframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- E-Book Reader Modal -->
+    <div id="readerModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full h-[85vh] flex flex-col justify-between p-6 relative shadow-2xl">
+            <!-- Reader Header -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <span class="text-[10px] text-amber-400 font-bold uppercase">Digital Reader Mode</span>
+                    <h3 id="readerBookTitle" class="text-lg font-bold text-white">Book Title</h3>
+                </div>
+                <button onclick="closeReaderModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Reader Body Content -->
+            <div id="readerBody" class="flex-1 my-4 overflow-y-auto custom-scrollbar p-4 bg-slate-950 rounded-xl border border-slate-800/80 text-slate-300 text-sm leading-relaxed space-y-4">
+                <!-- JS populated sample book chapter -->
+            </div>
+
+            <!-- Reader Footer Bar -->
+            <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs text-slate-400">
+                <span>Page 12 of 340</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="changeFontSize(-1)" class="px-2 py-1 bg-slate-800 rounded">A-</button>
+                    <button onclick="changeFontSize(1)" class="px-2 py-1 bg-slate-800 rounded">A+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 glass-nav z-40 px-6 py-2.5 border-t border-slate-800">
+        <div class="flex items-center justify-around">
+            <button onclick="switchNav('movies')" id="mobNavMovies" class="flex flex-col items-center gap-1 text-brand-red">
+                <i class="fa-solid fa-film text-base"></i>
+                <span class="text-[10px] font-medium">Movies</span>
+            </button>
+            <button onclick="switchNav('series')" id="mobNavSeries" class="flex flex-col items-center gap-1 text-slate-400">
+                <i class="fa-solid fa-tv text-base"></i>
+                <span class="text-[10px] font-medium">Series</span>
+            </button>
+            <button onclick="switchNav('library')" id="mobNavLibrary" class="flex flex-col items-center gap-1 text-slate-400">
+                <i class="fa-solid fa-book-open text-base"></i>
+                <span class="text-[10px] font-medium">Library</span>
+            </button>
+            <button onclick="switchNav('profile')" id="mobNavProfile" class="flex flex-col items-center gap-1 text-slate-400">
+                <i class="fa-solid fa-user text-base"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 px-4 text-center text-xs text-slate-500">
+        <p>&copy; 2026 CineLib Streaming & Library Portal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Data Store
+        const moviesData = [
+            { id: 'm1', title: 'Dune: Part Two', genre: 'Sci-Fi', year: '2024', rating: '8.6', quality: '4K', cover: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600', trailer: 'https://www.youtube.com/embed/Way9Dexny3w', desc: 'Paul Atreides unites with Chani and the Fremen while seeking revenge against conspirators.' },
+            { id: 'm2', title: 'Oppenheimer', genre: 'History', year: '2023', rating: '8.9', quality: 'IMAX 4K', cover: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=600', trailer: 'https://www.youtube.com/embed/uYPbbksJxIg', desc: 'The story of J. Robert Oppenheimer and his role in developing the atomic bomb.' },
+            { id: 'm3', title: 'Interstellar', genre: 'Sci-Fi', year: '2014', rating: '8.7', quality: 'HD', cover: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600', trailer: 'https://www.youtube.com/embed/zSWdZVtXT7E', desc: 'Explorers travel through a wormhole in space in an attempt to ensure human survival.' },
+            { id: 'm4', title: 'The Dark Knight', genre: 'Action', year: '2008', rating: '9.0', quality: '4K', cover: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600', trailer: 'https://www.youtube.com/embed/EXeTwQWrcwY', desc: 'Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.' },
+            { id: 'm5', title: 'Gladiator II', genre: 'Action', year: '2024', rating: '7.8', quality: 'HD', cover: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=600', trailer: 'https://www.youtube.com/embed/4rgYUipGJNo', desc: 'Lucius enters the Colosseum to return the glory of Rome to its people.' }
+        ];
+
+        // Game of Thrones Season Generator (1 - 8)
+        const gotSeasons = {};
+        for(let s = 1; s <= 8; s++) {
+            gotSeasons[`s${s}`] = [
+                { id: `got_s${s}_e1`, title: `S${s}E1: Winter Arrival`, duration: '58m', streamUrl: 'https://www.youtube.com/embed/KPLWWIOCOOQ', desc: `Season ${s} premiere episode detailing the fierce rivalries and alliances across Westeros.` },
+                { id: `got_s${s}_e2`, title: `S${s}E2: The King's Road`, duration: '56m', streamUrl: 'https://www.youtube.com/embed/gcTkhkqd3PE', desc: `Tensions escalate as royal houses travel toward King's Landing.` },
+                { id: `got_s${s}_e3`, title: `S${s}E3: Lord Snow`, duration: '57m', streamUrl: 'https://www.youtube.com/embed/BpJYNHmwKLc', desc: `Jon Snow trains at Castle Black while Eddard Stark arrives at the capital.` },
+                { id: `got_s${s}_e4`, title: `S${s}E4: Cripples, Bastards, and Broken Things`, duration: '54m', streamUrl: 'https://www.youtube.com/embed/rlR4PJn8b8I', desc: `Ned investigates the mysterious death of the former Hand of the King.` }
+            ];
+        }
+
+        const seriesData = [
+            { id: 's1', title: 'House of the Dragon', genre: 'Fantasy', year: '2022', rating: '8.5', quality: '4K', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600', trailer: 'https://www.youtube.com/embed/DotnJ7tTA34' },
+            { id: 's2', title: 'Breaking Bad', genre: 'Drama', year: '2008', rating: '9.5', quality: 'HD', cover: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600', trailer: 'https://www.youtube.com/embed/HhesaQXLuRY' },
+            { id: 's3', title: 'Stranger Things', genre: 'Sci-Fi', year: '2016', rating: '8.7', quality: '4K', cover: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600', trailer: 'https://www.youtube.com/embed/b9EkMc79ZSU' }
+        ];
+
+        const booksData = [
+            { id: 'b1', title: 'A Game of Thrones', author: 'George R.R. Martin', pages: '694 Pages', rating: '9.4', cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=600' },
+            { id: 'b2', title: 'Atomic Habits', author: 'James Clear', pages: '320 Pages', rating: '9.6', cover: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600' },
+            { id: 'b3', title: 'Dune: Book One', author: 'Frank Herbert', pages: '688 Pages', rating: '9.1', cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600' },
+            { id: 'b4', title: 'Clean Code', author: 'Robert C. Martin', pages: '464 Pages', rating: '8.9', cover: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=600' }
+        ];
+
+        let watchlist = JSON.parse(localStorage.getItem('cinelib_v2_watchlist')) || [];
+        let selectedGotSeason = 1;
+
+        // On Load Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMovies();
+            renderGotSeasonTabs();
+            renderGotEpisodes(1);
+            renderSeries();
+            renderBooks();
+            renderProfileWatchlist();
+        });
+
+        // Navigation Switcher
+        function switchNav(nav) {
+            document.querySelectorAll('.content-view').forEach(view => view.classList.add('hidden'));
+            
+            // Unhighlight desktop tabs
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-red', 'border-b-2', 'border-brand-red');
+                btn.classList.add('text-slate-400');
+            });
+
+            if(nav === 'movies') {
+                document.getElementById('sectionMovies').classList.remove('hidden');
+                document.getElementById('navMovies').classList.add('text-brand-red', 'border-b-2', 'border-brand-red');
+            } else if(nav === 'series') {
+                document.getElementById('sectionSeries').classList.remove('hidden');
+                document.getElementById('navSeries').classList.add('text-brand-red', 'border-b-2', 'border-brand-red');
+            } else if(nav === 'library') {
+                document.getElementById('sectionLibrary').classList.remove('hidden');
+                document.getElementById('navLibrary').classList.add('text-brand-red', 'border-b-2', 'border-brand-red');
+            } else if(nav === 'profile') {
+                document.getElementById('sectionProfile').classList.remove('hidden');
+                document.getElementById('navProfile').classList.add('text-brand-red', 'border-b-2', 'border-brand-red');
+                renderProfileWatchlist();
+            }
+        }
+
+        // Render Movies
+        function renderMovies(filterGenre = 'all', searchQuery = '') {
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = '';
+
+            const filtered = moviesData.filter(m => {
+                const matchesG = filterGenre === 'all' || m.genre === filterGenre;
+                const matchesS = m.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesG && matchesS;
+            });
+
+            filtered.forEach(m => {
+                const isSaved = watchlist.some(w => w.id === m.id);
+                grid.appendChild(createCard(m, () => openVideoPlayer(m.trailer, m.title), () => toggleWatchlist(m), isSaved));
+            });
+        }
+
+        function filterMoviesByGenre(genre) {
+            renderMovies(genre);
+        }
+
+        // Render GOT Season Tabs (1 - 8)
+        function renderGotSeasonTabs() {
+            const container = document.getElementById('gotSeasonTabs');
+            container.innerHTML = '';
+            for(let i = 1; i <= 8; i++) {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-1.5 rounded-xl font-bold text-xs transition flex-shrink-0 ${i === selectedGotSeason ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}`;
+                btn.textContent = `Season ${i}`;
+                btn.onclick = () => {
+                    selectedGotSeason = i;
+                    renderGotSeasonTabs();
+                    renderGotEpisodes(i);
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        // Render GOT Episodes
+        function renderGotEpisodes(seasonNum) {
+            document.getElementById('gotSeasonTitle').textContent = `Season ${seasonNum} Episodes`;
+            const container = document.getElementById('gotEpisodesGrid');
+            container.innerHTML = '';
+
+            const episodes = gotSeasons[`s${seasonNum}`];
+            episodes.forEach(ep => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between space-y-3 cursor-pointer group';
+                card.onclick = () => openVideoPlayer(ep.streamUrl, `Game of Thrones - ${ep.title}`);
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-[10px] text-amber-400 font-bold">
+                            <span><i class="fa-solid fa-play-circle"></i> ${ep.duration}</span>
+                            <span class="bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">Free Stream</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-100 group-hover:text-amber-400 transition">${ep.title}</h4>
+                        <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${ep.desc}</p>
+                    </div>
+                    <button class="w-full py-1.5 bg-slate-800 group-hover:bg-amber-500 group-hover:text-black text-slate-200 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> Watch Episode
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render TV Series
+        function renderSeries() {
+            const grid = document.getElementById('seriesGrid');
+            grid.innerHTML = '';
+            seriesData.forEach(s => {
+                const isSaved = watchlist.some(w => w.id === s.id);
+                grid.appendChild(createCard(s, () => openVideoPlayer(s.trailer, s.title), () => toggleWatchlist(s), isSaved));
+            });
+        }
+
+        // Render E-Books
+        function renderBooks() {
+            const grid = document.getElementById('booksGrid');
+            grid.innerHTML = '';
+            booksData.forEach(b => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-2xl overflow-hidden p-3 flex flex-col justify-between';
+                card.innerHTML = `
+                    <div class="aspect-[2/3] rounded-xl overflow-hidden mb-3 relative group">
+                        <img src="${b.cover}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <button onclick="openReaderModal('${b.title}')" class="px-3 py-1.5 bg-amber-500 text-black font-bold text-xs rounded-lg shadow">
+                                Read Sample
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-xs text-slate-100 truncate">${b.title}</h4>
+                        <p class="text-[10px] text-slate-400 truncate">${b.author}</p>
+                        <div class="flex items-center justify-between text-[10px] text-amber-400 pt-1">
+                            <span><i class="fa-solid fa-star"></i> ${b.rating}</span>
+                            <span class="text-slate-500">${b.pages}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Card Template Helper
+        function createCard(item, onPlay, onSave, isSaved) {
+            const card = document.createElement('div');
+            card.className = 'glass-card rounded-2xl overflow-hidden group flex flex-col justify-between';
+            card.innerHTML = `
+                <div class="relative aspect-[2/3] overflow-hidden" onclick="(${onPlay})()">
+                    <img src="${item.cover}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent opacity-80"></div>
+                    <div class="absolute top-2 left-2 bg-black/60 backdrop-blur px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 border border-amber-400/20">
+                        <i class="fa-solid fa-star text-[9px]"></i> ${item.rating}
+                    </div>
+                </div>
+                <div class="p-3 space-y-2">
+                    <h4 class="font-bold text-xs text-slate-100 truncate group-hover:text-brand-red transition">${item.title}</h4>
+                    <div class="flex items-center justify-between gap-2">
+                        <button onclick="(${onPlay})()" class="flex-1 py-1.5 bg-slate-800 hover:bg-brand-red text-slate-200 hover:text-white text-[11px] font-bold rounded-lg transition">
+                            Watch
+                        </button>
+                        <button onclick="(${onSave})()" class="w-7 h-7 rounded-lg bg-slate-800 hover:border-brand-red flex items-center justify-center text-xs">
+                            <i class="fa-solid ${isSaved ? 'fa-bookmark text-brand-red' : 'fa-plus text-slate-400'}"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Watchlist Functions
+        function toggleWatchlist(item) {
+            const idx = watchlist.findIndex(w => w.id === item.id);
+            if(idx > -1) watchlist.splice(idx, 1);
+            else watchlist.push(item);
+
+            localStorage.setItem('cinelib_v2_watchlist', JSON.stringify(watchlist));
+            renderMovies();
+            renderSeries();
+            renderProfileWatchlist();
+        }
+
+        function renderProfileWatchlist() {
+            document.getElementById('profileWatchlistCount').textContent = watchlist.length;
+            const grid = document.getElementById('profileWatchlistGrid');
+            grid.innerHTML = '';
+
+            if(watchlist.length === 0) {
+                grid.innerHTML = '<p class="text-xs text-slate-500 col-span-full py-4">No saved items in watchlist yet.</p>';
+                return;
+            }
+
+            watchlist.forEach(item => {
+                grid.appendChild(createCard(item, () => openVideoPlayer(item.trailer, item.title), () => toggleWatchlist(item), true));
+            });
+        }
+
+        // Video Modal
+        function openVideoPlayer(url, title) {
+            document.getElementById('videoModalTitle').textContent = title;
+            document.getElementById('videoIframe').src = `${url}?autoplay=1`;
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoIframe').src = '';
+            document.getElementById('videoModal').classList.add('hidden');
+        }
+
+        // Reader Modal
+        function openReaderModal(title) {
+            document.getElementById('readerBookTitle').textContent = title;
+            document.getElementById('readerBody').innerHTML = `
+                <p><b>Chapter 1: The Dragon's Arrival</b></p>
+                <p>The morning mist clung heavily to the battlements of Winterfell as snow fell gently over the courtyard. Lord Stark stood quiet upon the high towers, watching the horizon where northern riders approached.</p>
+                <p>Stories spoke of ancient beasts and forgotten crowns, yet in these cold halls, survival was the only true law that governed noble and peasant alike...</p>
+            `;
+            document.getElementById('readerModal').classList.remove('hidden');
+        }
+
+        function closeReaderModal() {
+            document.getElementById('readerModal').classList.add('hidden');
+        }
+
+        let currentFontSize = 14;
+        function changeFontSize(delta) {
+            currentFontSize += delta;
+            document.getElementById('readerBody').style.fontSize = `${currentFontSize}px`;
+        }
+
+        // Global Search
+        function handleGlobalSearch(val) {
+            renderMovies('all', val);
+        }
+
+        function clearGlobalSearch() {
+            document.getElementById('globalSearchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            renderMovies();
+        }
+    </script>
+</body>
+</html>
