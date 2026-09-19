@@ -40,6 +40,12 @@
         <span class="text-xl font-bold tracking-wider text-red-600">CineLib</span>
       </div>
 
+      <!-- Search Bar Included -->
+      <div class="flex-grow max-w-xs relative">
+        <input type="text" id="searchInput" placeholder="Search movies, series..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+      </div>
+
       <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
         <button onclick="showTab('home')" class="hover:text-red-500 transition"><i class="fa-solid fa-house mr-1"></i> Home</button>
         <button onclick="showTab('library')" class="hover:text-red-500 transition"><i class="fa-solid fa-book mr-1"></i> Library</button>
@@ -57,22 +63,43 @@
   <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-6">
 
     <!-- HOME TAB -->
-    <div id="tab-home" class="space-y-6">
-      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Featured Series</h2>
+    <div id="tab-home" class="space-y-8">
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <!-- Game of Thrones Only -->
-        <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
-          <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
-            <img src="https://m.media-amazon.com/images/M/MVBOMTY3ODUzOWMtNjJhNy00YWNmLWEwNTUtM2RlMmRkY2M0YzkxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute top-3 right-3 bg-black/80 px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400">⭐ 9.2</div>
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-base group-hover:text-red-500 transition">Game of Thrones</h3>
-            <p class="text-xs text-gray-400 mt-1">2011 - 2019 • 8 Seasons • Action, Drama</p>
+      <!-- 1. NEW MOVIES SECTION (FIRST ON TOP) -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3 flex items-center gap-2">
+            <i class="fa-solid fa-fire text-red-500"></i> New Movies
+          </h2>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center text-gray-400">
+          <p class="text-sm">New movies will be listed here soon.</p>
+        </div>
+      </section>
+
+      <!-- 2. TV SERIES SECTION (SEPARATE BELOW) -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3 flex items-center gap-2">
+            <i class="fa-solid fa-tv text-red-500"></i> TV Series
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <!-- Game of Thrones Card -->
+          <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
+            <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
+              <img src="https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1ee1uC.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              <div class="absolute top-3 right-3 bg-black/80 px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400">⭐ 9.2</div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-base group-hover:text-red-500 transition">Game of Thrones</h3>
+              <p class="text-xs text-gray-400 mt-1">2011 - 2019 • 8 Seasons • Action, Drama</p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
     </div>
 
     <!-- SERIES & STREAMING PAGE -->
@@ -185,7 +212,7 @@
     </div>
   </div>
 
-  <!-- Firebase Module Script -->
+  <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -245,7 +272,6 @@
     };
   </script>
 
-  <!-- Global Application Logic -->
   <script>
     function showTab(tabName) {
       ['home', 'library', 'saved', 'account', 'settings', 'series-details'].forEach(t => {
