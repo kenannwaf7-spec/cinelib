@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kmr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,8 +44,9 @@
 </head>
 <body class="bg-gray-950 text-white min-h-screen flex flex-col font-sans pb-20 md:pb-0 select-none">
 
+  <!-- Header Navigation -->
   <header class="bg-gray-900/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2 md:gap-4">
       <div class="flex items-center gap-2 cursor-pointer" onclick="showTab('home')">
         <i class="fa-solid fa-film text-red-600 text-2xl"></i>
         <span class="text-xl font-bold tracking-wider text-red-600">CineLib</span>
@@ -53,21 +54,30 @@
 
       <!-- Search Bar -->
       <div class="flex-grow max-w-xs relative">
-        <input type="text" id="searchInput" placeholder="Search movies, series..." class="w-full bg-gray-800/80 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600 transition">
+        <input type="text" id="searchInput" placeholder="گەڕیان..." class="w-full bg-gray-800/80 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-red-600 transition">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
       </div>
 
       <!-- Desktop Nav Buttons -->
-      <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
-        <button onclick="showTab('home')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-house"></i> Home</button>
-        <button onclick="showTab('library')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-book"></i> Library</button>
-        <button onclick="showTab('saved')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-bookmark"></i> Saved</button>
-        <button onclick="showTab('account')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-user"></i> Account</button>
-        <button onclick="showTab('settings')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> Settings</button>
+      <nav class="hidden md:flex gap-5 text-sm font-medium text-gray-300">
+        <button onclick="showTab('home')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">سەرەکی</span></button>
+        <button onclick="showTab('library')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-book"></i> <span data-i18n="nav_library">کتێبخانە</span></button>
+        <button onclick="showTab('saved')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-bookmark"></i> <span data-i18n="nav_saved">پاراستی</span></button>
+        <button onclick="showTab('account')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-user"></i> <span data-i18n="nav_account">حەساب</span></button>
+        <button onclick="showTab('settings')" class="hover:text-red-500 transition flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> <span data-i18n="nav_settings">ڕێکخستن</span></button>
       </nav>
 
-      <div id="authBtnContainer">
-        <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg text-sm font-semibold transition">Sign In</button>
+      <!-- Language Selector & Auth -->
+      <div class="flex items-center gap-2">
+        <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-red-600 cursor-pointer">
+          <option value="ku">کوردی (Badini)</option>
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+
+        <div id="authBtnContainer">
+          <button onclick="openAuthModal('login')" class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition" data-i18n="btn_login">چوونە ژوور</button>
+        </div>
       </div>
     </div>
   </header>
@@ -81,11 +91,11 @@
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3 flex items-center gap-2">
-            <i class="fa-solid fa-fire text-red-500"></i> New Movies
+            <i class="fa-solid fa-fire text-red-500"></i> <span data-i18n="section_movies">فیلمێن نوو</span>
           </h2>
         </div>
         <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center text-gray-400">
-          <p class="text-sm">New ad-free movies will be listed here soon.</p>
+          <p class="text-sm" data-i18n="empty_movies">فیلمێن نوو ب بێ ڕیکلام دێ ل ڤێرێ زێدە بن.</p>
         </div>
       </section>
 
@@ -93,7 +103,7 @@
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3 flex items-center gap-2">
-            <i class="fa-solid fa-tv text-red-500"></i> TV Series
+            <i class="fa-solid fa-tv text-red-500"></i> <span data-i18n="section_series">زنجیرە</span>
           </h2>
         </div>
 
@@ -101,7 +111,7 @@
           <!-- Game of Thrones Card -->
           <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
             <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
-              <img src="https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1ee1uC.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              <img src="https://m.media-amazon.com/images/M/MVB2Y2NmODBhNDItOTkwMC00MDdmLWI4NzAtY2NmN2I4Yzg2NTM2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
               <div class="absolute top-3 right-3 bg-black/80 px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400">⭐ 9.2</div>
             </div>
             <div class="p-4">
@@ -114,24 +124,25 @@
 
     </div>
 
+    <!-- SERIES DETAILS TAB -->
     <div id="tab-series-details" class="hidden space-y-6">
       <div class="flex items-center justify-between">
-        <button onclick="showTab('home')" class="text-xs font-semibold bg-gray-800 hover:bg-gray-700 px-3.5 py-2 rounded-xl border border-gray-700 transition">
-          ← Back to Home
+        <button onclick="showTab('home')" class="text-xs font-semibold bg-gray-800 hover:bg-gray-700 px-3.5 py-2 rounded-xl border border-gray-700 transition" data-i18n="btn_back">
+          ← زڤڕین بۆ سەرەکی
         </button>
         <button onclick="toggleFullScreen()" class="text-xs font-semibold bg-red-600 hover:bg-red-700 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
-          <i class="fa-solid fa-expand"></i> Full Screen Mode
+          <i class="fa-solid fa-expand"></i> <span data-i18n="btn_fullscreen">شاشا تەمام</span>
         </button>
       </div>
 
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3 md:p-5 shadow-2xl space-y-3">
         <h2 class="text-base md:text-lg font-bold text-red-500 flex items-center gap-2">
-          <i class="fa-solid fa-circle-play"></i> Game of Thrones: Season 1 - Episode <span id="currentEpNum">1</span>
+          <i class="fa-solid fa-circle-play"></i> Game of Thrones: <span data-i18n="season">وەرزێ</span> 1 - <span data-i18n="episode">ئەڵقەیا</span> <span id="currentEpNum">1</span>
         </h2>
 
         <!-- Clean HTML5 Native Player -->
         <div id="videoContainer" class="video-aspect-ratio rounded-xl overflow-hidden bg-black border border-gray-800 shadow-2xl">
-          <video id="cleanVideoPlayer" controls class="w-full h-full object-contain" poster="https://image.tmdb.org/t/p/w1280/2OMG023R3I3263.jpg">
+          <video id="cleanVideoPlayer" controls class="w-full h-full object-contain" poster="https://m.media-amazon.com/images/M/MVB2Y2NmODBhNDItOTkwMC00MDdmLWI4NzAtY2NmN2I4Yzg2NTM2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg">
             <source id="videoSource" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
             Your browser does not support HTML5 video player.
           </video>
@@ -140,22 +151,22 @@
 
       <!-- Episode Selector Grid -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
-        <h3 class="font-bold text-sm text-gray-300">Episodes (Season 1)</h3>
+        <h3 class="font-bold text-sm text-gray-300" data-i18n="episodes_title">ئەڵقە (وەرزێ 1)</h3>
         <div class="grid grid-cols-5 sm:grid-cols-10 gap-2" id="episodesGrid"></div>
       </div>
 
       <!-- Overview Info -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl space-y-2">
         <h1 class="text-xl font-bold">Game of Thrones</h1>
-        <p class="text-gray-400 text-xs leading-relaxed">
-          Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for a millennia.
+        <p class="text-gray-400 text-xs leading-relaxed" data-i18n="got_desc">
+          نەه خێزانێن بنەمالە یێن مەزن خەباتێ دکەن بۆ دەستبەسەرداگرتنا عەردێ وەستێرۆس، د دەمەک دا کو دوژمنەکێ کەڤنار پشتی هەزار ساڵان زڤڕیتەڤە.
         </p>
       </div>
     </div>
 
     <!-- OTHER TABS -->
     <div id="tab-library" class="hidden space-y-6">
-      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Digital Library</h2>
+      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3" data-i18n="nav_library">کتێبخانە</h2>
       <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 max-w-sm">
         <span class="bg-red-600/20 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded">Digital E-Book</span>
         <h3 class="font-bold text-sm mt-2">A Game of Thrones Novel</h3>
@@ -164,22 +175,33 @@
     </div>
 
     <div id="tab-saved" class="hidden space-y-6">
-      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Saved Items</h2>
-      <p class="text-gray-500 text-sm">No saved items found.</p>
+      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3" data-i18n="nav_saved">پاراستی</h2>
+      <p class="text-gray-500 text-sm" data-i18n="no_saved">هیچ تشته‌ک نەهاتیە پاراستن.</p>
     </div>
 
     <div id="tab-account" class="hidden space-y-6">
-      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">User Account</h2>
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-md">
-        <p class="text-sm text-gray-400" id="userEmailDisplay">Not signed in.</p>
+      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3" data-i18n="nav_account">حەسابێ بەکارهێنەری</h2>
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-md space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center text-red-500 text-xl font-bold">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold" id="userEmailDisplay">تۆ نەچوویە ژوور</p>
+            <p class="text-xs text-gray-500" id="userStatusDisplay">تکایە حەسابێ خۆ داخڵ بکە یان دروست بکە</p>
+          </div>
+        </div>
+        <div id="accountActions">
+          <button onclick="openAuthModal('login')" class="w-full bg-red-600 hover:bg-red-700 py-2 rounded-xl text-xs font-semibold transition" data-i18n="btn_login">چوونە ژوور</button>
+        </div>
       </div>
     </div>
 
     <div id="tab-settings" class="hidden space-y-6">
-      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3">Settings</h2>
+      <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3" data-i18n="nav_settings">ڕێکخستن</h2>
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-md space-y-4 text-sm">
         <div class="flex justify-between items-center">
-          <span>Autoplay Next Episode</span>
+          <span data-i18n="setting_autoplay">لێدانا ئۆتۆماتیکی بۆ ئەڵقەیا پاشتر</span>
           <input type="checkbox" checked class="accent-red-600 w-4 h-4">
         </div>
       </div>
@@ -187,22 +209,229 @@
 
   </main>
 
+  <!-- Mobile Navigation -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 flex justify-around py-2.5 z-40 text-xs">
-    <button onclick="showTab('home')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-house text-lg"></i><span>Home</span></button>
-    <button onclick="showTab('library')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-book text-lg"></i><span>Library</span></button>
-    <button onclick="showTab('saved')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-bookmark text-lg"></i><span>Saved</span></button>
-    <button onclick="showTab('account')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-user text-lg"></i><span>Account</span></button>
-    <button onclick="showTab('settings')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-gear text-lg"></i><span>Settings</span></button>
+    <button onclick="showTab('home')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-house text-lg"></i><span data-i18n="nav_home">سەرەکی</span></button>
+    <button onclick="showTab('library')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-book text-lg"></i><span data-i18n="nav_library">کتێبخانە</span></button>
+    <button onclick="showTab('saved')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-bookmark text-lg"></i><span data-i18n="nav_saved">پاراستی</span></button>
+    <button onclick="showTab('account')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-user text-lg"></i><span data-i18n="nav_account">حەساب</span></button>
+    <button onclick="showTab('settings')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-gear text-lg"></i><span data-i18n="nav_settings">ڕێکخستن</span></button>
   </nav>
 
-  <script>
-    /* 1. Global Anti-Pop-up Protection Script */
-    window.open = function() {
-      console.warn("Blocked unauthorized popup attempt.");
-      return null;
+  <!-- FIREBASE AUTH MODAL (LOGIN & REGISTER) -->
+  <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-gray-900 border border-gray-800 w-full max-w-md p-6 rounded-2xl relative shadow-2xl space-y-4">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+      
+      <div class="text-center">
+        <div class="w-12 h-12 bg-red-600/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h2 class="text-xl font-bold" id="authTitle">چوونە ژوور د CineLib دا</h2>
+        <p class="text-xs text-gray-400 mt-1" id="authSubTitle">ئیمێل و پاسۆردێ خۆ داخڵ بکە</p>
+      </div>
+
+      <!-- Form Mode Toggle Buttons -->
+      <div class="flex bg-gray-800 p-1 rounded-xl text-xs font-semibold">
+        <button id="toggleLoginBtn" onclick="switchAuthMode('login')" class="flex-1 py-1.5 rounded-lg bg-red-600 text-white transition">چوونە ژوور</button>
+        <button id="toggleRegisterBtn" onclick="switchAuthMode('register')" class="flex-1 py-1.5 rounded-lg text-gray-400 hover:text-white transition">دروستکرنا حەسابێ</button>
+      </div>
+
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">ئیمێل (Email)</label>
+          <input type="email" id="authEmail" required placeholder="name@example.com" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-red-600">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">پاسۆرد (Password)</label>
+          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-red-600">
+        </div>
+
+        <p id="authError" class="text-xs text-red-500 font-semibold hidden"></p>
+
+        <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 py-2.5 rounded-xl font-semibold text-sm transition">چوونە ژوور</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FIREBASE MODULE SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyIedYSKXuC9uJLLfWdwmNRiIsZmAPWX4",
+      authDomain: "cinelib-dbc8d.firebaseapp.com",
+      projectId: "cinelib-dbc8d",
+      storageBucket: "cinelib-dbc8d.firebasestorage.app",
+      messagingSenderId: "392966812345",
+      appId: "1:392966812345:web:f7d3aaa472df295cafe168"
     };
 
-    /* Sample Ad-Free Video Sources for Episodes */
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let currentMode = 'login';
+
+    window.switchAuthMode = function(mode) {
+      currentMode = mode;
+      const title = document.getElementById('authTitle');
+      const subTitle = document.getElementById('authSubTitle');
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const toggleLogin = document.getElementById('toggleLoginBtn');
+      const toggleReg = document.getElementById('toggleRegisterBtn');
+
+      if (mode === 'login') {
+        title.innerText = "چوونە ژوور د CineLib دا";
+        subTitle.innerText = "ئیمێل و پاسۆردێ خۆ داخڵ بکە";
+        submitBtn.innerText = "چوونە ژوور";
+        toggleLogin.className = "flex-1 py-1.5 rounded-lg bg-red-600 text-white transition";
+        toggleReg.className = "flex-1 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+      } else {
+        title.innerText = "دروستکرنا حەسابەکا نوو";
+        subTitle.innerText = "ئیمێل و پاسۆردەکێ زێدە بکە دا حەسابێ چێکەی";
+        submitBtn.innerText = "دروستکرنا حەسابێ";
+        toggleReg.className = "flex-1 py-1.5 rounded-lg bg-red-600 text-white transition";
+        toggleLogin.className = "flex-1 py-1.5 rounded-lg text-gray-400 hover:text-white transition";
+      }
+    };
+
+    window.handleAuthSubmit = async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value;
+      const password = document.getElementById('authPassword').value;
+      const errorEl = document.getElementById('authError');
+      const submitBtn = document.getElementById('authSubmitBtn');
+
+      errorEl.classList.add('hidden');
+      submitBtn.innerText = "چاڤەڕێ بە...";
+
+      try {
+        if (currentMode === 'login') {
+          await signInWithEmailAndPassword(auth, email, password);
+        } else {
+          await createUserWithEmailAndPassword(auth, email, password);
+        }
+        closeAuthModal();
+      } catch (err) {
+        errorEl.innerText = err.message;
+        errorEl.classList.remove('hidden');
+      } finally {
+        submitBtn.innerText = currentMode === 'login' ? "چوونە ژوور" : "دروستکرنا حەسابێ";
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      const authContainer = document.getElementById('authBtnContainer');
+      const emailDisplay = document.getElementById('userEmailDisplay');
+      const statusDisplay = document.getElementById('userStatusDisplay');
+      const accountActions = document.getElementById('accountActions');
+
+      if (user) {
+        authContainer.innerHTML = `
+          <button onclick="handleSignOut()" class="bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-1.5 rounded-lg text-xs transition">چوونەدەر (${user.email.split('@')[0]})</button>
+        `;
+        if (emailDisplay) emailDisplay.innerText = user.email;
+        if (statusDisplay) statusDisplay.innerText = "حەسابا تە چالاکە د سستەمی دا";
+        if (accountActions) {
+          accountActions.innerHTML = `
+            <button onclick="handleSignOut()" class="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 py-2 rounded-xl text-xs font-semibold transition text-red-400">چوونەدەر (Logout)</button>
+          `;
+        }
+      } else {
+        authContainer.innerHTML = `
+          <button onclick="openAuthModal('login')" class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition">چوونە ژوور</button>
+        `;
+        if (emailDisplay) emailDisplay.innerText = "تۆ نەچوویە ژوور";
+        if (statusDisplay) statusDisplay.innerText = "تکایە حەسابێ خۆ داخڵ بکە یان دروست بکە";
+        if (accountActions) {
+          accountActions.innerHTML = `
+            <button onclick="openAuthModal('login')" class="w-full bg-red-600 hover:bg-red-700 py-2 rounded-xl text-xs font-semibold transition">چوونە ژوور / دروستکرن</button>
+          `;
+        }
+      }
+    });
+
+    window.handleSignOut = function() {
+      signOut(auth);
+    };
+  </script>
+
+  <!-- UI & LANGUAGES SCRIPT -->
+  <script>
+    /* Popup Prevention */
+    window.open = function() { return null; };
+
+    /* Translations */
+    const translations = {
+      ku: {
+        nav_home: "سەرەکی",
+        nav_library: "کتێبخانە",
+        nav_saved: "پاراستی",
+        nav_account: "حەساب",
+        nav_settings: "ڕێکخستن",
+        btn_login: "چوونە ژوور",
+        section_movies: "فیلمێن نوو",
+        empty_movies: "فیلمێن نوو ب بێ ڕیکلام دێ ل ڤێرێ زێدە بن.",
+        section_series: "زنجیرە",
+        btn_back: "← زڤڕین بۆ سەرەکی",
+        btn_fullscreen: "شاشا تەمام",
+        season: "وەرزێ",
+        episode: "ئەڵقەیا",
+        episodes_title: "ئەڵقە (وەرزێ 1)",
+        got_desc: "نەه خێزانێن بنەمالە یێن مەزن خەباتێ دکەن بۆ دەستبەسەرداگرتنا عەردێ وەستێرۆس، د دەمەک دا کو دوژمنەکێ کەڤنار پشتی هەزار ساڵان زڤڕیتەڤە.",
+        no_saved: "هیچ تشته‌ک نەهاتیە پاراستن.",
+        setting_autoplay: "لێدانا ئۆتۆماتیکی بۆ ئەڵقەیا پاشتر"
+      },
+      ar: {
+        nav_home: "الرئيسية",
+        nav_library: "المكتبة",
+        nav_saved: "المحفوظات",
+        nav_account: "الحساب",
+        nav_settings: "الإعدادات",
+        btn_login: "تسجيل الدخول",
+        section_movies: "أفلام جديدة",
+        empty_movies: "سيتم إضافة أفلام جديدة بدون إعلانات قريباً.",
+        section_series: "مسلسلات",
+        btn_back: "← العودة للرئيسية",
+        btn_fullscreen: "ملء الشاشة",
+        season: "الموسم",
+        episode: "الحلقة",
+        episodes_title: "الحلقات (الموسم 1)",
+        got_desc: "تسع عائلات نبيضة تتصارع من أجل السيطرة على أراضي ويستروس، بينما يعود عدو قديم بعد آلاف السنين.",
+        no_saved: "لا توجد عناصر محفوظة.",
+        setting_autoplay: "تشغيل الحلقة التالية تلقائياً"
+      },
+      en: {
+        nav_home: "Home",
+        nav_library: "Library",
+        nav_saved: "Saved",
+        nav_account: "Account",
+        nav_settings: "Settings",
+        btn_login: "Sign In",
+        section_movies: "New Movies",
+        empty_movies: "New ad-free movies will be listed here soon.",
+        section_series: "TV Series",
+        btn_back: "← Back to Home",
+        btn_fullscreen: "Full Screen Mode",
+        season: "Season",
+        episode: "Episode",
+        episodes_title: "Episodes (Season 1)",
+        got_desc: "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for a millennia.",
+        no_saved: "No saved items found.",
+        setting_autoplay: "Autoplay Next Episode"
+      }
+    };
+
+    function changeLanguage(lang) {
+      const t = translations[lang] || translations.ku;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.innerText = t[key];
+      });
+      document.getElementById('searchInput').placeholder = lang === 'ar' ? 'بحث...' : (lang === 'en' ? 'Search...' : 'گەڕیان...');
+    }
+
     const episodeSources = {
       1: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
       2: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
@@ -252,7 +481,6 @@
       episodesGrid.appendChild(btn);
     }
 
-    /* Native Fullscreen Handler */
     function toggleFullScreen() {
       const player = document.getElementById('cleanVideoPlayer');
       if (player.requestFullscreen) {
@@ -262,6 +490,15 @@
       } else if (player.msRequestFullscreen) {
         player.msRequestFullscreen();
       }
+    }
+
+    function openAuthModal(mode) {
+      document.getElementById('authModal').classList.remove('hidden');
+      if (window.switchAuthMode) window.switchAuthMode(mode || 'login');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
     }
   </script>
 </body>
