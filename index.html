@@ -20,15 +20,13 @@
       border-radius: 1rem;
       background-color: #000;
     }
-    .video-container iframe,
-    .video-container video {
+    .video-container iframe {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       border: 0;
-      object-fit: contain;
     }
   </style>
 </head>
@@ -120,9 +118,9 @@
           ▶ Game of Thrones: Season 1 - Episode <span id="currentEpNum">1</span>
         </h2>
 
-        <!-- Optimized Player Frame -->
+        <!-- Reliable Streaming Player -->
         <div class="video-container shadow-2xl border border-gray-800">
-          <iframe id="mainVideoIframe" src="https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+          <iframe id="mainVideoIframe" src="https://vidsrc.to/embed/tv/1399/1/1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
         </div>
       </div>
 
@@ -296,15 +294,14 @@
       btn.innerText = i;
       btn.onclick = () => {
         document.getElementById('currentEpNum').innerText = i;
-        document.getElementById('mainVideoIframe').src = i === 1 
-          ? "https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview?autoplay=1" 
-          : "https://www.youtube.com/embed/gcTkNV5Vg1E";
+        document.getElementById('mainVideoIframe').src = `https://vidsrc.to/embed/tv/1399/1/${i}`;
       };
       episodesGrid.appendChild(btn);
     }
 
     function openExternal() {
-      window.open("https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview", "_blank");
+      const currentIframeSrc = document.getElementById('mainVideoIframe').src;
+      window.open(currentIframeSrc, "_blank");
     }
 
     function openAuthModal() {
