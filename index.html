@@ -1,557 +1,145 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineStream Ultra - Premium Streaming Platform</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            500: '#e11d48',
-                            600: '#e11d48',
-                            700: '#be123c',
-                            900: '#881337',
-                        },
-                        dark: {
-                            base: '#080b11',
-                            card: '#111827',
-                            border: '#1f2937',
-                            hover: '#374151'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #080b11; color: #f3f4f6; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .glassmorphism { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); }
-        .hero-gradient { background: linear-gradient(180deg, rgba(8,11,17,0) 0%, rgba(8,11,17,0.8) 60%, rgba(8,11,17,1) 100%); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineLib - Free Streaming Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- iOS PWA Capabilities -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CineLib">
 </head>
-<body class="font-sans antialiased pb-24 selection:bg-rose-500 selection:text-white">
+<body class="bg-gray-950 text-white min-h-screen flex flex-col font-sans">
 
-    <!-- Top Navigation Header -->
-    <header class="sticky top-0 z-50 glassmorphism border-b border-gray-800/80 px-4 sm:px-8 py-3.5 flex items-center justify-between transition-all">
-        <div class="flex items-center gap-8">
-            <a href="#" onclick="switchTab('movies')" class="flex items-center gap-2">
-                <div class="w-9 h-9 bg-rose-600 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-rose-600/30">C</div>
-                <span class="text-xl font-black tracking-wider text-white">CINE<span class="text-rose-500">STREAM</span></span>
-            </a>
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-                <button onclick="switchTab('movies')" id="navMovies" class="text-rose-500 transition">Movies</button>
-                <button onclick="switchTab('series')" id="navSeries" class="text-gray-400 hover:text-white transition">TV Series</button>
-                <button onclick="switchTab('watchlist')" id="navWatchlist" class="text-gray-400 hover:text-white transition">My Library</button>
-                <button onclick="switchTab('add-content')" id="navAdd" class="text-gray-400 hover:text-white transition">+ Add Content</button>
-            </nav>
-        </div>
-
-        <div class="flex items-center gap-3">
-            <!-- Search Bar -->
-            <div class="relative w-40 sm:w-64">
-                <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Search movies, series..." class="w-full bg-gray-900/90 border border-gray-700/60 text-xs sm:text-sm text-gray-200 rounded-full pl-9 pr-4 py-2 focus:outline-none focus:border-rose-500 transition shadow-inner">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-gray-400"></i>
-            </div>
-            
-            <button onclick="switchTab('settings')" class="w-9 h-9 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center transition border border-gray-700">
-                <i class="fa-solid fa-gear text-sm"></i>
-            </button>
-            <button onclick="openAuthModal()" class="w-9 h-9 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center transition shadow-lg shadow-rose-600/20">
-                <i class="fa-solid fa-user text-sm"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Dynamic Content Container -->
-    <main id="mainContainer" class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
-        <!-- JS renders active tab content here -->
-    </main>
-
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 glassmorphism border-t border-gray-800 flex justify-around py-3 z-40">
-        <button onclick="switchTab('movies')" id="tabMovies" class="flex flex-col items-center text-rose-500 font-medium">
-            <i class="fa-solid fa-film text-lg"></i>
-            <span class="text-[11px] mt-1">Movies</span>
-        </button>
-        <button onclick="switchTab('series')" id="tabSeries" class="flex flex-col items-center text-gray-400">
-            <i class="fa-solid fa-tv text-lg"></i>
-            <span class="text-[11px] mt-1">Series</span>
-        </button>
-        <button onclick="switchTab('watchlist')" id="tabWatchlist" class="flex flex-col items-center text-gray-400">
-            <i class="fa-solid fa-bookmark text-lg"></i>
-            <span class="text-[11px] mt-1">Library</span>
-        </button>
-        <button onclick="switchTab('profile')" id="tabProfile" class="flex flex-col items-center text-gray-400">
-            <i class="fa-solid fa-user text-lg"></i>
-            <span class="text-[11px] mt-1">Profile</span>
-        </button>
-    </nav>
-
-    <!-- Video Player Modal -->
-    <div id="playerModal" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col justify-center items-center p-2 sm:p-6 backdrop-blur-md">
-        <div class="w-full max-w-5xl flex justify-between items-center mb-3 text-white px-2">
-            <h3 id="playerTitle" class="font-bold text-lg truncate">Now Playing</h3>
-            <button onclick="closePlayer()" class="text-gray-400 hover:text-white text-2xl transition"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden relative border border-gray-800 shadow-2xl">
-            <iframe id="videoPlayer" class="w-full h-full" src="" frameborder="0" allowfullscreen allow="autoplay"></iframe>
-        </div>
+  <!-- Header / Navigation -->
+  <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid font-bold text-red-600 text-2xl fa-film"></i>
+        <span class="text-xl font-bold tracking-wider text-red-600">CineLib</span>
+      </div>
+      <div id="userStatus" class="flex items-center gap-3">
+        <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg text-sm font-semibold transition">Login / Register</button>
+      </div>
     </div>
+  </header>
 
-    <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 w-full max-w-md relative shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-white">Welcome Back</h2>
-                <p class="text-xs text-gray-400 mt-1">Sign in to sync your library and preferences</p>
-            </div>
-            <form onsubmit="handleAuth(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
-                    <input type="email" required placeholder="user@example.com" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-rose-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Password</label>
-                    <input type="password" required placeholder="••••••••" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-rose-500">
-                </div>
-                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-xl text-sm font-bold transition shadow-lg shadow-rose-600/30">Sign In</button>
-            </form>
-        </div>
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-6">
+    <section class="mb-8 text-center">
+      <h1 class="text-3xl font-extrabold mb-2">Watch Movies & Series Free</h1>
+      <p class="text-gray-400 text-sm">Create an account to save your watchlist and stream anywhere.</p>
+    </section>
+
+    <!-- Content Grid Placeholder -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4" id="movieGrid">
+      <div class="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 p-2">
+        <div class="h-48 bg-gray-800 rounded mb-2 flex items-center justify-center text-gray-500">Poster</div>
+        <h3 class="font-bold text-sm">Sample Movie</h3>
+        <p class="text-xs text-gray-400">2026 • Action</p>
+      </div>
     </div>
+  </main>
 
-<script>
-    // Initial Movie Database
-    let moviesData = [
-        {
-            id: 'm-ezas',
-            title: 'EzAs Movie',
-            category: 'Action',
-            year: 2026,
-            rating: '9.8',
-            duration: '2h 10m',
-            image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800',
-            banner: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1200',
-            videoUrl: 'https://www.youtube.com/embed/Way9Dexny3w',
-            description: 'Exclusive custom featured movie streams available for all users.'
-        },
-        {
-            id: 'm1',
-            title: 'Dune: Part Two',
-            category: 'Sci-Fi',
-            year: 2024,
-            rating: '8.6',
-            duration: '2h 46m',
-            image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800',
-            banner: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200',
-            videoUrl: 'https://www.youtube.com/embed/Way9Dexny3w',
-            description: 'Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.'
-        },
-        {
-            id: 'm2',
-            title: 'The Dark Knight',
-            category: 'Action',
-            year: 2008,
-            rating: '9.0',
-            duration: '2h 32m',
-            image: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=800',
-            banner: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=1200',
-            videoUrl: 'https://www.youtube.com/embed/EXeTwQWrcwY',
-            description: 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological tests.'
-        }
-    ];
+  <!-- Auth Modal -->
+  <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-gray-900 border border-gray-800 w-full max-w-md p-6 rounded-xl relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+      <h2 id="modalTitle" class="text-xl font-bold mb-4 text-center">Login to CineLib</h2>
+      
+      <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Email</label>
+          <input type="email" id="authEmail" required class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-red-600">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Password</label>
+          <input type="password" id="authPassword" required class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-red-600">
+        </div>
+        <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 py-2 rounded font-semibold text-sm transition">Login</button>
+      </form>
 
-    // Initial TV Series Database
-    let seriesData = [
-        {
-            id: 's-got',
-            title: 'Game of Thrones',
-            category: 'Fantasy',
-            seasonsCount: 8,
-            rating: '9.2',
-            image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800',
-            description: 'Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.',
-            seasons: {
-                "Season 1": [
-                    { ep: 1, title: "Winter Is Coming", videoUrl: "https://www.youtube.com/embed/Way9Dexny3w" },
-                    { ep: 2, title: "The Kingsroad", videoUrl: "https://www.youtube.com/embed/Way9Dexny3w" }
-                ],
-                "Season 2": [
-                    { ep: 1, title: "The North Remembers", videoUrl: "https://www.youtube.com/embed/Way9Dexny3w" }
-                ]
-            }
-        },
-        {
-            id: 's-hotd',
-            title: 'House of the Dragon',
-            category: 'Drama',
-            seasonsCount: 2,
-            rating: '8.5',
-            image: 'https://images.unsplash.com/photo-1514539079130-25950c84af65?w=800',
-            description: 'An internal succession war within House Targaryen at the height of its power, 172 years before the birth of Daenerys Targaryen.',
-            seasons: {
-                "Season 1": [
-                    { ep: 1, title: "Heirs of the Dragon", videoUrl: "https://www.youtube.com/embed/Way9Dexny3w" }
-                ]
-            }
-        }
-    ];
+      <div class="mt-4 text-center text-xs text-gray-400">
+        <span id="toggleText">Don't have an account?</span>
+        <button onclick="toggleAuthMode()" id="toggleBtn" class="text-red-500 font-semibold ml-1 underline">Register</button>
+      </div>
+    </div>
+  </div>
 
-    let currentTab = 'movies';
-    let watchlist = JSON.parse(localStorage.getItem('cinestream_watchlist')) || [];
+  <!-- Firebase Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    function switchTab(tab) {
-        currentTab = tab;
-        renderHeaderState(tab);
-        
-        if(tab === 'movies') renderMovies();
-        else if(tab === 'series') renderSeries();
-        else if(tab === 'watchlist') renderWatchlist();
-        else if(tab === 'profile') renderProfile();
-        else if(tab === 'settings') renderSettings();
-        else if(tab === 'add-content') renderAddContent();
-    }
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyIedYSKXuC9uJLLfWdwmNRiIsZmAPWX4",
+      authDomain: "cinelib-dbc8d.firebaseapp.com",
+      projectId: "cinelib-dbc8d",
+      storageBucket: "cinelib-dbc8d.firebasestorage.app",
+      messagingSenderId: "392966812345",
+      appId: "1:392966812345:web:f7d3aaa472df295cafe168",
+      measurementId: "G-Q8J9Y8G90F"
+    };
 
-    function renderHeaderState(tab) {
-        document.querySelectorAll('header nav button').forEach(b => b.className = 'text-gray-400 hover:text-white transition');
-        document.querySelectorAll('nav.md\\:hidden button').forEach(b => b.className = 'flex flex-col items-center text-gray-400');
-        
-        if(tab === 'movies') {
-            document.getElementById('navMovies')?.classList.replace('text-gray-400', 'text-rose-500');
-            document.getElementById('tabMovies')?.classList.replace('text-gray-400', 'text-rose-500');
-        } else if(tab === 'series') {
-            document.getElementById('navSeries')?.classList.replace('text-gray-400', 'text-rose-500');
-            document.getElementById('tabSeries')?.classList.replace('text-gray-400', 'text-rose-500');
-        } else if(tab === 'watchlist') {
-            document.getElementById('navWatchlist')?.classList.replace('text-gray-400', 'text-rose-500');
-            document.getElementById('tabWatchlist')?.classList.replace('text-gray-400', 'text-rose-500');
-        } else if(tab === 'profile') {
-            document.getElementById('tabProfile')?.classList.replace('text-gray-400', 'text-rose-500');
-        }
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    function renderMovies(query = '') {
-        const container = document.getElementById('mainContainer');
-        let filtered = moviesData;
-        if(query) filtered = filtered.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
+    let isLoginMode = true;
 
-        let heroMovie = moviesData[0];
-        let html = `
-            <!-- Hero Feature -->
-            <div class="relative rounded-3xl overflow-hidden border border-gray-800 bg-gray-900 aspect-[16/9] sm:aspect-[21/9] shadow-2xl">
-                <img src="${heroMovie.banner}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 hero-gradient flex flex-col justify-end p-6 sm:p-10">
-                    <span class="bg-rose-600 text-white text-xs font-black uppercase px-3 py-1 rounded-full w-max mb-3 tracking-wider shadow-lg shadow-rose-600/30">Featured Title</span>
-                    <h1 class="text-2xl sm:text-4xl font-black text-white mb-2">${heroMovie.title}</h1>
-                    <p class="text-xs sm:text-sm text-gray-300 max-w-xl line-clamp-2 mb-4">${heroMovie.description}</p>
-                    <div class="flex items-center gap-3">
-                        <button onclick="playMedia('${heroMovie.videoUrl}', '${heroMovie.title}')" class="bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition shadow-lg shadow-rose-600/30">
-                            <i class="fa-solid fa-play"></i> Watch Now
-                        </button>
-                        <button onclick="toggleSave('${heroMovie.id}')" class="bg-gray-800/80 hover:bg-gray-700 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl border border-gray-700 backdrop-blur transition">
-                            <i class="${watchlist.includes(heroMovie.id) ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+    window.openAuthModal = () => document.getElementById('authModal').classList.remove('hidden');
+    window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
 
-            <!-- Content Grid -->
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold text-white tracking-wide">Trending Movies</h2>
-                    <span class="text-xs text-gray-400">${filtered.length} Titles</span>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-        `;
+    window.toggleAuthMode = () => {
+      isLoginMode = !isLoginMode;
+      document.getElementById('modalTitle').innerText = isLoginMode ? 'Login to CineLib' : 'Register New Account';
+      document.getElementById('authSubmitBtn').innerText = isLoginMode ? 'Login' : 'Register';
+      document.getElementById('toggleText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
+      document.getElementById('toggleBtn').innerText = isLoginMode ? 'Register' : 'Login';
+    };
 
-        filtered.forEach(m => {
-            const isSaved = watchlist.includes(m.id);
-            html += `
-                <div class="bg-gray-900/80 rounded-2xl overflow-hidden border border-gray-800/80 flex flex-col justify-between hover:border-gray-700 transition group">
-                    <div class="relative aspect-[2/3] overflow-hidden">
-                        <img src="${m.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        <button onclick="toggleSave('${m.id}')" class="absolute top-3 left-3 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center text-xs backdrop-blur border border-white/10 hover:bg-rose-600 transition">
-                            <i class="${isSaved ? 'fa-solid text-rose-500' : 'fa-regular text-white'} fa-bookmark"></i>
-                        </button>
-                        <span class="absolute bottom-3 right-3 bg-black/80 backdrop-blur px-2 py-0.5 rounded-md text-[11px] text-amber-400 font-bold border border-white/10">
-                            <i class="fa-solid fa-star text-amber-400"></i> ${m.rating}
-                        </span>
-                    </div>
-                    <div class="p-3.5 flex flex-col justify-between flex-1">
-                        <div>
-                            <h3 class="font-bold text-sm text-white truncate group-hover:text-rose-500 transition">${m.title}</h3>
-                            <p class="text-[11px] text-gray-400 mt-1">${m.year} • ${m.category}</p>
-                        </div>
-                        <button onclick="playMedia('${m.videoUrl}', '${m.title}')" class="mt-4 w-full bg-gray-800 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 border border-gray-700 hover:border-rose-600">
-                            <i class="fa-solid fa-play text-[10px]"></i> Play
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
+    window.handleAuth = async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value;
+      const password = document.getElementById('authPassword').value;
 
-        html += `</div></div>`;
-        container.innerHTML = html;
-    }
-
-    function renderSeries() {
-        const container = document.getElementById('mainContainer');
-        let html = `
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold text-white tracking-wide">Explore TV Shows</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        `;
-        
-        seriesData.forEach(s => {
-            html += `
-                <div class="bg-gray-900/80 rounded-2xl p-4 border border-gray-800/80 flex gap-4 hover:border-gray-700 transition">
-                    <img src="${s.image}" class="w-28 sm:w-36 aspect-[2/3] object-cover rounded-xl border border-gray-800">
-                    <div class="flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="text-[10px] bg-rose-950/80 text-rose-400 border border-rose-800/50 px-2 py-0.5 rounded-md font-bold uppercase">${s.category}</span>
-                            <h3 class="font-bold text-lg text-white mt-1">${s.title}</h3>
-                            <p class="text-xs text-amber-400 font-semibold mt-0.5"><i class="fa-solid fa-star"></i> ${s.rating} • ${s.seasonsCount} Seasons</p>
-                            <p class="text-xs text-gray-400 mt-2 line-clamp-3">${s.description}</p>
-                        </div>
-                        <button onclick="openSeriesDetails('${s.id}')" class="bg-rose-600 hover:bg-rose-700 text-xs py-2 px-4 rounded-xl text-white font-bold self-start mt-3 transition shadow-lg shadow-rose-600/20">
-                            View Seasons & Episodes
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
-    }
-
-    function openSeriesDetails(seriesId) {
-        const series = seriesData.find(s => s.id === seriesId);
-        if(!series) return;
-        const container = document.getElementById('mainContainer');
-        
-        let html = `
-            <button onclick="renderSeries()" class="mb-4 text-xs text-gray-400 hover:text-white flex items-center gap-2 transition">
-                <i class="fa-solid fa-arrow-left"></i> Back to Series
-            </button>
-            <div class="bg-gray-900/80 p-6 rounded-3xl border border-gray-800 mb-6">
-                <h1 class="text-2xl font-black text-white mb-2">${series.title}</h1>
-                <p class="text-xs text-gray-400 max-w-2xl">${series.description}</p>
-            </div>
-            <div class="space-y-6">
-        `;
-
-        if(series.seasons) {
-            for(let seasonName in series.seasons) {
-                html += `
-                    <div class="bg-gray-900/60 rounded-2xl p-4 border border-gray-800">
-                        <h3 class="font-bold text-sm text-rose-500 mb-3">${seasonName}</h3>
-                        <div class="space-y-2">
-                `;
-                series.seasons[seasonName].forEach(ep => {
-                    html += `
-                        <div class="flex justify-between items-center bg-gray-800/40 p-3 rounded-xl border border-gray-800/60 hover:border-gray-700 transition">
-                            <span class="text-xs font-semibold text-gray-200">Episode ${ep.ep}: ${ep.title}</span>
-                            <button onclick="playMedia('${ep.videoUrl}', '${series.title} - ${ep.title}')" class="text-xs bg-rose-600 hover:bg-rose-700 text-white font-bold px-3 py-1.5 rounded-lg transition">
-                                Play Episode
-                            </button>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-        }
-        html += `</div>`;
-        container.innerHTML = html;
-    }
-
-    function renderWatchlist() {
-        const container = document.getElementById('mainContainer');
-        const saved = moviesData.filter(m => watchlist.includes(m.id));
-        
-        if(saved.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-24 text-gray-500">
-                    <i class="fa-solid fa-bookmark text-5xl mb-4 text-gray-600 block"></i>
-                    <h3 class="text-base font-bold text-white mb-1">Your Library is Empty</h3>
-                    <p class="text-xs text-gray-400">Save movies and series to watch them later.</p>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = `
-            <h2 class="text-xl font-bold text-white mb-4">Saved Content</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">` + 
-            saved.map(m => `
-                <div class="bg-gray-900/80 rounded-2xl p-3 border border-gray-800">
-                    <img src="${m.image}" class="w-full aspect-[2/3] object-cover rounded-xl mb-3">
-                    <h4 class="font-bold text-xs text-white truncate">${m.title}</h4>
-                    <button onclick="toggleSave('${m.id}')" class="mt-3 w-full bg-rose-950/60 text-rose-400 border border-rose-800/40 py-1.5 rounded-xl text-xs font-semibold">Remove</button>
-                </div>
-            `).join('') + `</div>`;
-    }
-
-    function renderProfile() {
-        const container = document.getElementById('mainContainer');
-        container.innerHTML = `
-            <div class="max-w-md mx-auto bg-gray-900/80 p-8 rounded-3xl border border-gray-800 text-center shadow-2xl">
-                <div class="w-24 h-24 bg-gradient-to-tr from-rose-600 to-amber-500 rounded-full mx-auto mb-4 p-1 shadow-xl">
-                    <div class="w-full h-full bg-gray-900 rounded-full flex items-center justify-center text-3xl text-white">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                </div>
-                <h2 class="font-black text-xl text-white">User Account</h2>
-                <p class="text-xs text-gray-400 mt-1">Premium VIP Subscription Active</p>
-
-                <div class="mt-6 border-t border-gray-800 pt-4 text-left space-y-3 text-xs text-gray-300">
-                    <div class="flex justify-between py-1"><span>Saved Items:</span> <span class="font-bold text-rose-500">${watchlist.length}</span></div>
-                    <div class="flex justify-between py-1"><span>Streaming Quality:</span> <span class="font-bold text-emerald-400">Ultra HD 4K</span></div>
-                    <div class="flex justify-between py-1"><span>Server Region:</span> <span>Global (Auto)</span></div>
-                </div>
-
-                <button onclick="openAuthModal()" class="mt-8 w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-xl text-xs font-bold transition shadow-lg shadow-rose-600/30">
-                    Switch Account
-                </button>
-            </div>
-        `;
-    }
-
-    function renderSettings() {
-        const container = document.getElementById('mainContainer');
-        container.innerHTML = `
-            <div class="max-w-xl mx-auto bg-gray-900/80 p-8 rounded-3xl border border-gray-800 shadow-2xl">
-                <h2 class="text-xl font-bold text-white mb-6">Platform Settings</h2>
-                <div class="space-y-6 text-sm text-gray-300">
-                    <div class="flex items-center justify-between py-2 border-b border-gray-800">
-                        <div>
-                            <p class="font-semibold text-white">Dark Theme</p>
-                            <p class="text-xs text-gray-400">Keep standard dark streaming style</p>
-                        </div>
-                        <input type="checkbox" checked disabled class="accent-rose-600 w-4 h-4">
-                    </div>
-                    <div class="flex items-center justify-between py-2 border-b border-gray-800">
-                        <div>
-                            <p class="font-semibold text-white">Autoplay Next Episode</p>
-                            <p class="text-xs text-gray-400">Automatically start next video</p>
-                        </div>
-                        <input type="checkbox" checked class="accent-rose-600 w-4 h-4">
-                    </div>
-                    <div class="flex items-center justify-between py-2">
-                        <div>
-                            <p class="font-semibold text-white">Data Saver</p>
-                            <p class="text-xs text-gray-400">Lower video playback quality</p>
-                        </div>
-                        <input type="checkbox" class="accent-rose-600 w-4 h-4">
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    function renderAddContent() {
-        const container = document.getElementById('mainContainer');
-        container.innerHTML = `
-            <div class="max-w-lg mx-auto bg-gray-900/80 p-8 rounded-3xl border border-gray-800 shadow-2xl">
-                <h2 class="text-xl font-bold text-white mb-2">Add New Movie</h2>
-                <p class="text-xs text-gray-400 mb-6">Easily insert video stream URLs directly to your platform.</p>
-                <form onsubmit="handleAddNewContent(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Movie Title</label>
-                        <input type="text" id="newTitle" required placeholder="e.g. Inception" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Direct Embed Video Link (YouTube / Direct MP4 / Embed)</label>
-                        <input type="url" id="newUrl" required placeholder="https://www.youtube.com/embed/..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Poster Image Link (URL)</label>
-                        <input type="url" id="newImg" required placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500">
-                    </div>
-                    <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-xl text-xs font-bold transition shadow-lg shadow-rose-600/30">
-                        Add to Movies Library
-                    </button>
-                </form>
-            </div>
-        `;
-    }
-
-    function handleAddNewContent(e) {
-        e.preventDefault();
-        const title = document.getElementById('newTitle').value;
-        const videoUrl = document.getElementById('newUrl').value;
-        const image = document.getElementById('newImg').value;
-
-        moviesData.unshift({
-            id: 'm-' + Date.now(),
-            title: title,
-            category: 'Custom',
-            year: 2026,
-            rating: '9.9',
-            duration: 'Custom',
-            image: image,
-            banner: image,
-            videoUrl: videoUrl,
-            description: 'User added stream media content.'
-        });
-
-        alert('New content successfully added to Movies tab!');
-        switchTab('movies');
-    }
-
-    function toggleSave(id) {
-        if(watchlist.includes(id)) {
-            watchlist = watchlist.filter(i => i !== id);
+      try {
+        if (isLoginMode) {
+          await signInWithEmailAndPassword(auth, email, password);
+          alert("Welcome back!");
         } else {
-            watchlist.push(id);
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert("Account created successfully!");
         }
-        localStorage.setItem('cinestream_watchlist', JSON.stringify(watchlist));
-        switchTab(currentTab);
-    }
-
-    function playMedia(url, title = 'Video Stream') {
-        document.getElementById('playerTitle').innerText = title;
-        document.getElementById('videoPlayer').src = url;
-        document.getElementById('playerModal').classList.remove('hidden');
-    }
-
-    function closePlayer() {
-        document.getElementById('videoPlayer').src = '';
-        document.getElementById('playerModal').classList.add('hidden');
-    }
-
-    function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
-    function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
-    function handleAuth(e) {
-        e.preventDefault();
-        alert('Successfully logged in!');
         closeAuthModal();
-    }
+      } catch (err) {
+        alert(err.message);
+      }
+    };
 
-    function handleSearch() {
-        const query = document.getElementById('searchInput').value;
-        if(currentTab === 'movies') renderMovies(query);
-    }
+    window.handleSignOut = () => signOut(auth);
 
-    // Default Load Tab
-    switchTab('movies');
-</script>
+    onAuthStateChanged(auth, (user) => {
+      const userStatusDiv = document.getElementById('userStatus');
+      if (user) {
+        userStatusDiv.innerHTML = `
+          <span class="text-xs text-gray-300">${user.email}</span>
+          <button onclick="handleSignOut()" class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded text-xs">Logout</button>
+        `;
+      } else {
+        userStatusDiv.innerHTML = `
+          <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg text-sm font-semibold transition">Login / Register</button>
+        `;
+      }
+    });
+  </script>
 </body>
 </html>
