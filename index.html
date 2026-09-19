@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CineLib">
 </head>
-<body class="bg-gray-950 text-white min-h-screen flex flex-col font-sans pb-16 md:pb-0">
+<body class="bg-gray-950 text-white min-h-screen flex flex-col font-sans pb-20 md:pb-0">
 
   <!-- Navigation Bar -->
   <header class="bg-gray-900 border-b border-gray-800 sticky top-0 z-40">
@@ -33,7 +33,7 @@
 
       <!-- Search Bar -->
       <div class="flex-grow max-w-xs relative">
-        <input type="text" placeholder="Search..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:border-red-600">
+        <input type="text" placeholder="Search..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:border-red-600 text-white">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
       </div>
 
@@ -54,62 +54,64 @@
       </h2>
 
       <!-- Game of Thrones Main Card -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
           <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
             <img src="https://m.media-amazon.com/images/M/MVBOMTY3ODUzOWMtNjJhNy00YWNmLWEwNTUtM2RlMmRkY2M0YzkxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400 flex items-center gap-1">
+            <div class="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-full text-[11px] font-bold text-yellow-400 flex items-center gap-1">
               <i class="fa-solid fa-star"></i> 9.2
             </div>
             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-              <span class="bg-red-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg"><i class="fa-solid fa-play mr-1"></i> Watch Now</span>
+              <span class="bg-red-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-lg"><i class="fa-solid fa-play mr-1"></i> Watch</span>
             </div>
           </div>
-          <div class="p-4">
-            <h3 class="font-bold text-lg text-white group-hover:text-red-500 transition">Game of Thrones</h3>
-            <p class="text-xs text-gray-400 mt-1">2011 - 2019 • 8 Seasons • Action, Drama</p>
+          <div class="p-3">
+            <h3 class="font-bold text-sm text-white group-hover:text-red-500 transition truncate">Game of Thrones</h3>
+            <p class="text-[11px] text-gray-400 mt-0.5">2011 - 2019 • Series</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SERIES DETAILS & STABLE PLAYER PAGE -->
-    <div id="tab-series-details" class="hidden space-y-8">
-      <!-- Navigation Back Button -->
-      <button onclick="showTab('home')" class="text-xs font-semibold bg-gray-800 hover:bg-gray-700 px-3 py-1.5 rounded-lg border border-gray-700 transition flex items-center gap-2">
-        <i class="fa-solid fa-arrow-left"></i> Back to Home
-      </button>
+    <!-- SERIES DETAILS & VIDEO PLAYER PAGE -->
+    <div id="tab-series-details" class="hidden space-y-6">
+      <!-- Back Button -->
+      <div>
+        <button onclick="showTab('home')" class="text-xs font-semibold bg-gray-800 hover:bg-gray-700 px-3.5 py-2 rounded-xl border border-gray-700 transition flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </button>
+      </div>
 
-      <!-- Stable High-Quality Video Player -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 md:p-6 shadow-2xl">
-        <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-red-500">
+      <!-- Main Video Player Box -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 md:p-6 shadow-2xl space-y-3">
+        <h2 class="text-lg md:text-xl font-bold flex items-center gap-2 text-red-500">
           <i class="fa-solid fa-circle-play"></i> Watching: Season 1 - Episode <span id="currentEpNum">1</span>
         </h2>
         
-        <div class="w-full bg-black rounded-xl overflow-hidden border border-gray-800 shadow-2xl relative" style="height: 380px;">
+        <div class="w-full aspect-video bg-black rounded-xl overflow-hidden border border-gray-800 shadow-2xl relative">
           <iframe id="mainVideoIframe" class="w-full h-full border-0" src="https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
       </div>
 
-      <!-- Episode Grid Selector -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <!-- Seasons & Episodes Grid -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 md:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-          <h3 class="font-bold text-lg">Seasons & Episodes</h3>
-          <select class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-3 py-1.5 font-bold text-white">
+          <h3 class="font-bold text-base md:text-lg">Seasons & Episodes</h3>
+          <select class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-3 py-1.5 font-bold text-white focus:outline-none">
             <option>Season 1</option>
           </select>
         </div>
 
-        <div class="grid grid-cols-5 sm:grid-cols-10 gap-2.5" id="episodesGrid">
-          <!-- Episode Buttons dynamically rendered -->
+        <div class="grid grid-cols-5 sm:grid-cols-10 gap-2" id="episodesGrid">
+          <!-- Dynamic Buttons -->
         </div>
       </div>
 
-      <!-- Show Overview & Rating -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl space-y-3">
-        <div class="flex items-center gap-3">
-          <span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-star"></i> 9.2 / 10 IMDb</span>
-          <span class="bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-bold px-3 py-1 rounded-full">TV-MA</span>
+      <!-- Series Information & Overview -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 md:p-6 shadow-xl space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-star"></i> 9.2 / 10 IMDb</span>
+          <span class="bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-bold px-2.5 py-1 rounded-full">TV-MA</span>
         </div>
         <h1 class="text-2xl font-black">Game of Thrones</h1>
         <p class="text-gray-400 text-sm leading-relaxed">
@@ -117,13 +119,13 @@
         </p>
       </div>
 
-      <!-- Cast Section -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 class="font-bold text-lg border-l-4 border-red-600 pl-3">Main Cast</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <!-- Main Cast -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 md:p-6 shadow-xl space-y-4">
+        <h3 class="font-bold text-base md:text-lg border-l-4 border-red-600 pl-3">Main Cast</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" class="w-10 h-10 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Peter Dinklage</p>
               <p class="text-[10px] text-gray-400">Tyrion Lannister</p>
@@ -131,7 +133,7 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" class="w-10 h-10 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Emilia Clarke</p>
               <p class="text-[10px] text-gray-400">Daenerys Targaryen</p>
@@ -139,7 +141,7 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" class="w-10 h-10 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Kit Harington</p>
               <p class="text-[10px] text-gray-400">Jon Snow</p>
@@ -147,7 +149,7 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" class="w-10 h-10 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Lena Headey</p>
               <p class="text-[10px] text-gray-400">Cersei Lannister</p>
@@ -165,7 +167,7 @@
       <div class="text-center py-12 text-gray-500">No saved items yet.</div>
     </div>
 
-    <!-- DIGITAL LIBRARY TAB (BOOKS ONLY) -->
+    <!-- DIGITAL LIBRARY TAB -->
     <div id="tab-library" class="hidden space-y-6">
       <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-book-open text-red-500"></i> Digital Book Library</h2>
       <p class="text-gray-400 text-sm">Explore digital ebooks and guides.</p>
@@ -199,7 +201,7 @@
 
   </main>
 
-  <!-- Mobile Bottom Navigation -->
+  <!-- Mobile Bottom Navigation Bar -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around py-2.5 z-40 text-xs">
     <button onclick="showTab('home')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-house text-lg"></i><span>Home</span></button>
     <button onclick="showTab('saved')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-bookmark text-lg"></i><span>Saved</span></button>
@@ -228,6 +230,7 @@
         if(el) el.classList.add('hidden');
       });
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      window.scrollTo(0, 0);
     }
 
     function openSeriesPage() {
@@ -238,7 +241,7 @@
 
     for (let i = 1; i <= 10; i++) {
       const btn = document.createElement('button');
-      btn.className = `py-3 rounded-xl font-bold text-sm transition ${i === 1 ? 'bg-red-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`;
+      btn.className = `py-2.5 rounded-xl font-bold text-xs transition ${i === 1 ? 'bg-red-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`;
       btn.innerText = i;
       btn.onclick = () => selectEpisode(i, btn);
       episodesGrid.appendChild(btn);
@@ -248,9 +251,9 @@
       document.getElementById('currentEpNum').innerText = epNum;
       
       Array.from(episodesGrid.children).forEach(b => {
-        b.className = 'py-3 rounded-xl font-bold text-sm bg-gray-800 text-gray-300 hover:bg-gray-700 transition';
+        b.className = 'py-2.5 rounded-xl font-bold text-xs bg-gray-800 text-gray-300 hover:bg-gray-700 transition';
       });
-      btnElement.className = 'py-3 rounded-xl font-bold text-sm bg-red-600 text-white shadow-lg transition';
+      btnElement.className = 'py-2.5 rounded-xl font-bold text-xs bg-red-600 text-white shadow-lg transition';
 
       const iframe = document.getElementById('mainVideoIframe');
       if (epNum === 1) {
