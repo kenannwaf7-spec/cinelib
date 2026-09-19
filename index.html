@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineLib - Game of Thrones</title>
+  <title>CineLib - Streaming Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -23,46 +23,46 @@
         </div>
         <!-- Desktop Nav -->
         <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
-          <button onclick="showTab('home')" class="hover:text-red-500 transition"><i class="fa-solid fa-house mr-1"></i> سەرەکی</button>
-          <button onclick="showTab('saved')" class="hover:text-red-500 transition"><i class="fa-solid fa-bookmark mr-1"></i> پاشکەوتکری</button>
-          <button onclick="showTab('library')" class="hover:text-red-500 transition"><i class="fa-solid fa-book mr-1"></i> کتێبخانە</button>
-          <button onclick="showTab('profile')" class="hover:text-red-500 transition"><i class="fa-solid fa-user mr-1"></i> پرۆفایل</button>
-          <button onclick="showTab('settings')" class="hover:text-red-500 transition"><i class="fa-solid fa-gear mr-1"></i> ڕێکخستن</button>
+          <button onclick="showTab('home')" class="hover:text-red-500 transition"><i class="fa-solid fa-house mr-1"></i> Home</button>
+          <button onclick="showTab('saved')" class="hover:text-red-500 transition"><i class="fa-solid fa-bookmark mr-1"></i> Saved</button>
+          <button onclick="showTab('library')" class="hover:text-red-500 transition"><i class="fa-solid fa-book mr-1"></i> Library</button>
+          <button onclick="showTab('profile')" class="hover:text-red-500 transition"><i class="fa-solid fa-user mr-1"></i> Profile</button>
+          <button onclick="showTab('settings')" class="hover:text-red-500 transition"><i class="fa-solid fa-gear mr-1"></i> Settings</button>
         </nav>
       </div>
 
       <!-- Search Bar -->
       <div class="flex-grow max-w-xs relative">
-        <input type="text" placeholder="لێگەڕیان..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:border-red-600">
+        <input type="text" placeholder="Search..." class="w-full bg-gray-800 border border-gray-700 rounded-full py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:border-red-600">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
       </div>
 
-      <!-- User Auth Status -->
+      <!-- Auth Action -->
       <div id="userStatus" class="flex items-center gap-3">
-        <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg text-sm font-semibold transition">چوونەژوور</button>
+        <button onclick="openAuthModal()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg text-sm font-semibold transition">Login</button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Container -->
+  <!-- Main Content Area -->
   <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-6">
 
-    <!-- HOME TAB (Show Only Game of Thrones Series Card) -->
+    <!-- HOME TAB -->
     <div id="tab-home" class="space-y-6">
       <h2 class="text-xl font-bold border-l-4 border-red-600 pl-3 flex items-center gap-2">
-        <i class="fa-solid fa-tv text-red-500"></i> زنجیرەیێن پێشنیارکری
+        <i class="fa-solid fa-tv text-red-500"></i> Featured Series
       </h2>
 
-      <!-- Series Card -->
+      <!-- Game of Thrones Main Card -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div onclick="openSeriesPage()" class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition cursor-pointer group shadow-xl">
           <div class="relative aspect-[2/3] overflow-hidden bg-gray-800">
-            <img src="https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1ee1uC.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <img src="https://m.media-amazon.com/images/M/MVBOMTY3ODUzOWMtNjJhNy00YWNmLWEwNTUtM2RlMmRkY2M0YzkxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
             <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400 flex items-center gap-1">
               <i class="fa-solid fa-star"></i> 9.2
             </div>
             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-              <span class="bg-red-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg">تەماشاکرن</span>
+              <span class="bg-red-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg"><i class="fa-solid fa-play mr-1"></i> Watch Now</span>
             </div>
           </div>
           <div class="p-4">
@@ -73,40 +73,39 @@
       </div>
     </div>
 
-    <!-- SERIES DETAILS & PLAYER PAGE -->
+    <!-- SERIES DETAILS & STABLE PLAYER PAGE -->
     <div id="tab-series-details" class="hidden space-y-8">
-      <!-- Back Button -->
+      <!-- Navigation Back Button -->
       <button onclick="showTab('home')" class="text-xs font-semibold bg-gray-800 hover:bg-gray-700 px-3 py-1.5 rounded-lg border border-gray-700 transition flex items-center gap-2">
-        <i class="fa-solid fa-arrow-left"></i> زڤڕین بۆ پەڕەیێ سەرەکی
+        <i class="fa-solid fa-arrow-left"></i> Back to Home
       </button>
 
-      <!-- Video Player Section -->
+      <!-- Stable High-Quality Video Player -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 md:p-6 shadow-2xl">
         <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-red-500">
-          <i class="fa-solid fa-circle-play"></i> تەماشاکرن: Season 1 - Episode <span id="currentEpNum">1</span>
+          <i class="fa-solid fa-circle-play"></i> Watching: Season 1 - Episode <span id="currentEpNum">1</span>
         </h2>
         
-        <div class="aspect-video w-full bg-black rounded-xl overflow-hidden border border-gray-800 shadow-inner relative">
-          <iframe id="mainVideoIframe" class="w-full h-full" src="https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div class="w-full bg-black rounded-xl overflow-hidden border border-gray-800 shadow-2xl relative" style="height: 380px;">
+          <iframe id="mainVideoIframe" class="w-full h-full border-0" src="https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
       </div>
 
-      <!-- Season & Episodes Selector -->
+      <!-- Episode Grid Selector -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-          <h3 class="font-bold text-lg">وەرز و ئەلقە</h3>
-          <select class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-3 py-1.5 font-bold">
-            <option>وەرزێ 1 (Season 1)</option>
+          <h3 class="font-bold text-lg">Seasons & Episodes</h3>
+          <select class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-3 py-1.5 font-bold text-white">
+            <option>Season 1</option>
           </select>
         </div>
 
-        <!-- Episode Buttons Grid (1 to 10) -->
         <div class="grid grid-cols-5 sm:grid-cols-10 gap-2.5" id="episodesGrid">
-          <!-- Generated Dynamically -->
+          <!-- Episode Buttons dynamically rendered -->
         </div>
       </div>
 
-      <!-- Overview & Rating -->
+      <!-- Show Overview & Rating -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl space-y-3">
         <div class="flex items-center gap-3">
           <span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-star"></i> 9.2 / 10 IMDb</span>
@@ -114,17 +113,17 @@
         </div>
         <h1 class="text-2xl font-black">Game of Thrones</h1>
         <p class="text-gray-400 text-sm leading-relaxed">
-          حەفت بنەمالەیێن دەسەڵاتدار ل سەر ئەردێ وەستێرۆس خەباتێ دکن بۆ ب دەستڤەئینانا تەختێ ئاسن و کۆنترۆڵکرنا هەمی هەرێمان، د دەمەکیدا مەترسیەکا مەزن ژ پشت دیوارێ باکور نێزیک دبیت.
+          Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for a millennia.
         </p>
       </div>
 
-      <!-- Main Cast Section -->
+      <!-- Cast Section -->
       <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 class="font-bold text-lg border-l-4 border-red-600 pl-3">ئەکتەرێن سەرەکی (Actors)</h3>
+        <h3 class="font-bold text-lg border-l-4 border-red-600 pl-3">Main Cast</h3>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://image.tmdb.org/t/p/w200/963L31A8L321A31A.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80'" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Peter Dinklage</p>
               <p class="text-[10px] text-gray-400">Tyrion Lannister</p>
@@ -132,7 +131,7 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://image.tmdb.org/t/p/w200/eA2p2p2.jpg" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80'" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Emilia Clarke</p>
               <p class="text-[10px] text-gray-400">Daenerys Targaryen</p>
@@ -140,7 +139,7 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://image.tmdb.org/t/p/w200/k3k3k.jpg" onerror="this.src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80'" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Kit Harington</p>
               <p class="text-[10px] text-gray-400">Jon Snow</p>
@@ -148,7 +147,7 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-800/50 p-2.5 rounded-xl border border-gray-800">
-            <img src="https://image.tmdb.org/t/p/w200/l4l4l.jpg" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80'" class="w-12 h-12 rounded-full object-cover">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" class="w-12 h-12 rounded-full object-cover">
             <div>
               <p class="font-bold text-xs">Lena Headey</p>
               <p class="text-[10px] text-gray-400">Cersei Lannister</p>
@@ -161,20 +160,23 @@
 
     <!-- SAVED TAB -->
     <div id="tab-saved" class="hidden">
-      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-bookmark text-red-500"></i> پاشکەوتکری</h2>
-      <p class="text-gray-400 text-sm mb-6">لیستا تە یا تایبەت بۆ تەماشاکرنا دوواتر.</p>
-      <div class="text-center py-12 text-gray-500">چ تشت نەهاتیە پاشکەوتکرن.</div>
+      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-bookmark text-red-500"></i> Saved Watchlist</h2>
+      <p class="text-gray-400 text-sm mb-6">Your personal saved titles.</p>
+      <div class="text-center py-12 text-gray-500">No saved items yet.</div>
     </div>
 
-    <!-- DIGITAL LIBRARY TAB -->
-    <div id="tab-library" class="hidden">
-      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-book-open text-red-500"></i> کتێبخانە (PDF & Books)</h2>
-      <p class="text-gray-400 text-sm mb-6">خوێندنا کتێبان ب شێوەیێ دیجیتاڵی.</p>
+    <!-- DIGITAL LIBRARY TAB (BOOKS ONLY) -->
+    <div id="tab-library" class="hidden space-y-6">
+      <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-book-open text-red-500"></i> Digital Book Library</h2>
+      <p class="text-gray-400 text-sm">Explore digital ebooks and guides.</p>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
-          <span class="bg-red-600/20 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded">PDF Book</span>
-          <h3 class="font-bold text-sm mt-2">A Game of Thrones Novel</h3>
-          <p class="text-xs text-gray-400">George R.R. Martin</p>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <span class="bg-red-600/20 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded">Digital Book</span>
+            <h3 class="font-bold text-sm mt-2">Dune Novel</h3>
+            <p class="text-xs text-gray-400">Frank Herbert</p>
+          </div>
+          <button class="mt-4 bg-gray-800 hover:bg-gray-700 text-xs py-1.5 rounded-lg border border-gray-700">Read Online</button>
         </div>
       </div>
     </div>
@@ -182,28 +184,28 @@
     <!-- PROFILE TAB -->
     <div id="tab-profile" class="hidden">
       <div class="max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl">
-        <h2 class="text-xl font-bold mb-4">پرۆفایلێ بەکارهێنەری</h2>
-        <p class="text-xs text-gray-400">CineLib Member Account</p>
+        <h2 class="text-xl font-bold mb-4">User Profile</h2>
+        <p class="text-xs text-gray-400">CineLib Account Status: Active</p>
       </div>
     </div>
 
     <!-- SETTINGS TAB -->
     <div id="tab-settings" class="hidden">
       <div class="max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl">
-        <h2 class="text-xl font-bold mb-4">ڕێکخستن</h2>
-        <p class="text-xs text-gray-400">CineLib Web App Settings</p>
+        <h2 class="text-xl font-bold mb-4">Settings</h2>
+        <p class="text-xs text-gray-400">App Preferences</p>
       </div>
     </div>
 
   </main>
 
-  <!-- Mobile Bottom Navigation Bar -->
+  <!-- Mobile Bottom Navigation -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around py-2.5 z-40 text-xs">
-    <button onclick="showTab('home')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-house text-lg"></i><span>سەرەکی</span></button>
-    <button onclick="showTab('saved')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-bookmark text-lg"></i><span>پاشکەوت</span></button>
-    <button onclick="showTab('library')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-book text-lg"></i><span>کتێبخانە</span></button>
-    <button onclick="showTab('profile')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-user text-lg"></i><span>پرۆفایل</span></button>
-    <button onclick="showTab('settings')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-gear text-lg"></i><span>ڕێکخستن</span></button>
+    <button onclick="showTab('home')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-house text-lg"></i><span>Home</span></button>
+    <button onclick="showTab('saved')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-bookmark text-lg"></i><span>Saved</span></button>
+    <button onclick="showTab('library')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-book text-lg"></i><span>Library</span></button>
+    <button onclick="showTab('profile')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-user text-lg"></i><span>Profile</span></button>
+    <button onclick="showTab('settings')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500"><i class="fa-solid fa-gear text-lg"></i><span>Settings</span></button>
   </nav>
 
   <!-- Auth Modal -->
@@ -220,7 +222,6 @@
   </div>
 
   <script>
-    // Tab switching logic
     function showTab(tabName) {
       ['home', 'saved', 'library', 'profile', 'settings', 'series-details'].forEach(t => {
         const el = document.getElementById(`tab-${t}`);
@@ -233,9 +234,7 @@
       showTab('series-details');
     }
 
-    // Dynamic Episodes Generation (1 to 10)
     const episodesGrid = document.getElementById('episodesGrid');
-    let currentEp = 1;
 
     for (let i = 1; i <= 10; i++) {
       const btn = document.createElement('button');
@@ -248,13 +247,11 @@
     function selectEpisode(epNum, btnElement) {
       document.getElementById('currentEpNum').innerText = epNum;
       
-      // Update Active Button Style
       Array.from(episodesGrid.children).forEach(b => {
         b.className = 'py-3 rounded-xl font-bold text-sm bg-gray-800 text-gray-300 hover:bg-gray-700 transition';
       });
       btnElement.className = 'py-3 rounded-xl font-bold text-sm bg-red-600 text-white shadow-lg transition';
 
-      // Load Video (Episode 1 uses your Google Drive Video)
       const iframe = document.getElementById('mainVideoIframe');
       if (epNum === 1) {
         iframe.src = "https://drive.google.com/file/d/12wjJZ2f5oi0-LV0XT_k3DpjLVjsv5R40/preview";
